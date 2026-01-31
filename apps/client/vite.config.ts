@@ -19,10 +19,6 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: 8080,
-    allowedHosts: [
-      'client-production-7699.up.railway.app',
-      'simpledocor.com',
-      '.railway.app'
-    ]
+    allowedHosts: true
   },
 })
