@@ -22,6 +22,7 @@ interface CreateTransactionRequest {
     address: string;
     city: string;
     postalCode: string;
+    totalAmount: number;
 }
 
 export interface Transaction {
@@ -96,6 +97,7 @@ class PaymentServiceClass {
                     address: request.address,
                     city: request.city,
                     postalCode: request.postalCode,
+                    totalAmount: request.totalAmount,
                 }),
             });
 
