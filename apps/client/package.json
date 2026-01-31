@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "start": "vite preview --port 8080 --host 0.0.0.0",
+    "start": "serve dist -s -n -L -p $PORT",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
@@ -20,6 +20,7 @@
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
+    "serve": "^14.2.5",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
