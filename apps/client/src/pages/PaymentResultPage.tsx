@@ -28,6 +28,7 @@ export const PaymentResultPage = () => {
     const [searchParams] = useSearchParams();
     const [transactionData, setTransactionData] = useState<TransactionData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const baseUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const loadTransactionData = async () => {
@@ -51,7 +52,7 @@ export const PaymentResultPage = () => {
                 }
 
                 // Obtener datos de la transacción desde el backend
-                const response = await fetch(import.meta.env.VITE_API_URL + `/transactions/${transactionId}`);
+                const response = await fetch(`${baseUrl}/transactions/${transactionId}`);
 
                 if (!response.ok) {
                     throw new Error('No se pudo obtener la información de la transacción');
@@ -60,7 +61,7 @@ export const PaymentResultPage = () => {
                 const transaction = await response.json();
 
                 // Obtener datos del producto
-                const productResponse = await fetch(import.meta.env.VITE_API_URL + `/products/${transaction.productId}`);
+                const productResponse = await fetch(`${baseUrl}/products/${transaction.productId}`);
                 const product = productResponse.ok ? await productResponse.json() : null;
 
                 setTransactionData({
