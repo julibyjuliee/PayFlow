@@ -30,7 +30,7 @@ export const ShopPage = () => {
         <main className="max-w-7xl mx-auto px-6 py-12">
             <div className="mb-12">
                 <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">
-                    Nuevos Productos
+                    {import.meta.env.VITE_API_URL}
                 </h1>
                 <p className="text-slate-500 text-lg">
                     Descubre las últimas incorporaciones a nuestra colección.
