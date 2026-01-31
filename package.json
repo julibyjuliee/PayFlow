@@ -1,0 +1,27 @@
+{
+  "name": "payflow-main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:safe": "turbo run dev --filter=api & wait-on $VITE_API_URL/products && turbo run dev --filter=client",
+    "build": "turbo build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "packageManager": "npm@11.8.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "volta": {
+    "node": "25.5.0",
+    "npm": "11.8.0"
+  },
+  "devDependencies": {
+    "turbo": "^2.8.0",
+    "wait-on": "^9.0.3"
+  }
+}
