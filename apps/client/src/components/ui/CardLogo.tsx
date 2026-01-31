@@ -1,4 +1,5 @@
 import type { CardType } from '../../utils/creditCardValidation';
+import type { ReactElement } from 'react';
 
 interface CardLogoProps {
     cardType: CardType;
@@ -10,7 +11,7 @@ export const CardLogo = ({ cardType, className = '' }: CardLogoProps) => {
         return null;
     }
 
-    const logos: Record<Exclude<CardType, 'unknown'>, JSX.Element> = {
+    const logos: Record<Exclude<CardType, 'unknown'>, ReactElement> = {
         visa: (
             <svg
                 className={className}

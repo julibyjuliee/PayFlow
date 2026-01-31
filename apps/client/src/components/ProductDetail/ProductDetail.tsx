@@ -6,20 +6,16 @@ import { addToCart } from "../../store/slices/cartSlice";
 
 interface ProductDetailProps {
     product: Product;
-    onNavigateBack?: () => void;
     onNavigateToCart?: () => void;
-    onCheckout?: (product: Product) => void;
 }
 
 export const ProductDetail = ({
     product,
-    onNavigateBack,
     onNavigateToCart,
-    onCheckout,
 }: ProductDetailProps) => {
     const dispatch = useAppDispatch();
     const cartItems = useAppSelector(state => state.cart.items);
-    const [selectedImage, setSelectedImage] = useState(0);
+    const [selectedImage] = useState(0);
     const [selectedQuantity, setSelectedQuantity] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [addedProduct, setAddedProduct] = useState<{ product: Product; quantity: number } | null>(null);
@@ -40,11 +36,9 @@ export const ProductDetail = ({
     };
 
     const handleAddToCart = () => {
-        // Verificar cuántos de este producto ya están en el carrito
         const existingCartItem = cartItems.find(item => item.product.id === product.id);
         const currentQuantityInCart = existingCartItem ? existingCartItem.quantity : 0;
 
-        // Verificar si agregar la cantidad seleccionada excedería el stock
         if (currentQuantityInCart + selectedQuantity > product.stock) {
             const availableToAdd = product.stock - currentQuantityInCart;
 
@@ -55,8 +49,6 @@ export const ProductDetail = ({
             }
             return;
         }
-
-        // Si no excede el stock, agregar al carrito
         dispatch(addToCart({ product, quantity: selectedQuantity }));
         setAddedProduct({ product, quantity: selectedQuantity });
         setShowModal(true);
@@ -70,7 +62,7 @@ export const ProductDetail = ({
     const handleViewCart = () => {
         setShowModal(false);
         if (onNavigateToCart) {
-            onNavigateToCart(); // Navegar a la vista del carrito
+            onNavigateToCart();
         }
     };
 

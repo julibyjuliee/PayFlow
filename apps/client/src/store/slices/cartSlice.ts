@@ -6,7 +6,7 @@ export interface CartItem {
     quantity: number;
 }
 
-interface CartState {
+export interface CartState {
     items: CartItem[];
     totalItems: number;
     totalAmount: number;
@@ -82,7 +82,7 @@ const cartSlice = createSlice({
         },
 
         // Load cart from localStorage
-        loadCartFromStorage: (state, action: PayloadAction<CartState>) => {
+        loadCartFromStorage: (_state, action: PayloadAction<CartState>) => {
             return action.payload;
         },
     },

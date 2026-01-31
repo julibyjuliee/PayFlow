@@ -1,9 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { routesConfig } from './routes.config';
 
-/**
- * Router principal de la aplicación
- */
 const router = createBrowserRouter(routesConfig, {
     future: {
         v7_startTransition: true,

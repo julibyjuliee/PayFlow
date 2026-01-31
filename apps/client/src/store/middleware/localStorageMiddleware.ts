@@ -1,13 +1,9 @@
 import type { Middleware } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
 
-// Encryption key (in production, this should be in environment variables)
 const STORAGE_KEY = 'payflow_app_state';
 
-// Simple encryption/decryption (in production, use a proper encryption library)
 const encrypt = (data: string): string => {
     try {
-        // Simple XOR encryption (replace with proper encryption in production)
         return btoa(data);
     } catch (error) {
         console.error('Encryption error:', error);
@@ -24,12 +20,10 @@ const decrypt = (data: string): string => {
     }
 };
 
-// Middleware to save state to localStorage
-export const localStorageMiddleware: Middleware<{}, RootState> =
+export const localStorageMiddleware: Middleware =
     (store) => (next) => (action) => {
         const result = next(action);
 
-        // Actions that trigger localStorage save
         const actionsToSave = [
             'cart/addToCart',
             'cart/removeFromCart',
@@ -39,7 +33,7 @@ export const localStorageMiddleware: Middleware<{}, RootState> =
             'checkout/completeTransaction',
         ];
 
-        if (actionsToSave.some((type) => action.type.startsWith(type))) {
+        if (typeof action === 'object' && action !== null && 'type' in action && typeof action.type === 'string' && actionsToSave.some((type) => (action.type as string).startsWith(type))) {
             try {
                 const state = store.getState();
                 const dataToStore = {
@@ -61,8 +55,8 @@ export const localStorageMiddleware: Middleware<{}, RootState> =
         return result;
     };
 
-// Function to load state from localStorage
-export const loadStateFromStorage = (): Partial<RootState> | undefined => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const loadStateFromStorage = (): any => {
     try {
         const encrypted = localStorage.getItem(STORAGE_KEY);
         if (!encrypted) {
@@ -78,7 +72,6 @@ export const loadStateFromStorage = (): Partial<RootState> | undefined => {
     }
 };
 
-// Function to clear state from localStorage
 export const clearStateFromStorage = (): void => {
     try {
         localStorage.removeItem(STORAGE_KEY);
