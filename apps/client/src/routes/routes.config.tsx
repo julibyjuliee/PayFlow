@@ -2,9 +2,6 @@ import { lazy, Suspense, type ReactNode } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { MainLayout, CheckoutLayout } from '../layouts';
 
-/**
- * Lazy loading para optimización de rendimiento
- */
 const ShopPage = lazy(() =>
     import('../pages/ShopPage').then((module) => ({ default: module.ShopPage }))
 );

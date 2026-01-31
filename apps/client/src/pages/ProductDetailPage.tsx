@@ -1,14 +1,25 @@
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProductDetail } from '../components/ProductDetail';
-import { useAppSelector } from '../store/hooks'; // 1. Usar el hook de Redux
-import type { Product } from '../types';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchProducts } from '../store/slices/productSlice';
 
 export const ProductDetailPage = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { productId } = useParams<{ productId: string }>();
     const products = useAppSelector((state) => state.products.items);
-    const product = products.find((p) => p.id === productId);
     const isLoading = useAppSelector((state) => state.products.loading);
+
+    // Buscar el producto
+    const product = products.find((p) => p.id === productId);
+
+    // Si no hay productos y no está cargando, despachar fetchProducts
+    useEffect(() => {
+        if (!products.length && !isLoading) {
+            dispatch(fetchProducts());
+        }
+    }, [products.length, isLoading, dispatch]);
 
     if (isLoading) {
         return (
@@ -18,7 +29,8 @@ export const ProductDetailPage = () => {
         );
     }
 
-    if (!product) {
+    // Solo mostrar "no encontrado" si no está cargando y no hay producto
+    if (!product && !isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
@@ -37,16 +49,15 @@ export const ProductDetailPage = () => {
         );
     }
 
-    const handleCheckout = (product: Product) => {
-        navigate('/cart');
-    };
+    if (!product) {
+        // Mientras se resuelve, no mostrar nada
+        return null;
+    }
 
     return (
         <ProductDetail
             product={product}
-            onNavigateBack={() => navigate('/')}
             onNavigateToCart={() => navigate('/cart')}
-            onCheckout={handleCheckout}
         />
     );
 };

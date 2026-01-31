@@ -30,7 +30,7 @@ export interface Transaction {
     status: "pending" | "completed" | "failed";
 }
 
-interface CheckoutState {
+export interface CheckoutState {
     currentTransaction: Transaction | null;
     transactions: Transaction[];
     shippingAddress: ShippingAddress | null;
@@ -107,7 +107,7 @@ const checkoutSlice = createSlice({
 
         // Load transactions from localStorage
         loadTransactionsFromStorage: (
-            state,
+            _state,
             action: PayloadAction<CheckoutState>
         ) => {
             return action.payload;

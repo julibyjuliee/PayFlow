@@ -63,8 +63,6 @@ export const StateComponent = ({
     status,
     orderNumber,
     deliveryAddress,
-    customerInfo,
-    product,
     totalAmount,
     errorMessage,
     onNavigate,

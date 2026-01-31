@@ -1,8 +1,3 @@
-/**
- * Utilidades para validación de tarjetas de crédito
- * Incluye detección de tipo de tarjeta, validación Luhn, y validaciones de formato
- */
-
 export type CardType = 'visa' | 'mastercard' | 'amex' | 'unknown';
 
 export interface CardValidation {
@@ -10,9 +5,6 @@ export interface CardValidation {
     cardType: CardType;
 }
 
-/**
- * Detecta el tipo de tarjeta basado en el número
- */
 export const detectCardType = (cardNumber: string): CardType => {
     const cleaned = cardNumber.replace(/\s/g, '');
 

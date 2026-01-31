@@ -7,7 +7,7 @@ export const fetchProducts = createAsyncThunk('products/fetchAll', async () => {
     return await response.json();
 });
 
-interface ProductState {
+export interface ProductState {
     items: Product[];
     loading: boolean;
     error: string | null;

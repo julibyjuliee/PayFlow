@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { ProductGrid } from '../components/Product';
-import { mockProducts } from '../data/mockData';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addToCart } from '../store/slices/cartSlice';
 import type { Product } from '../types';
@@ -12,13 +11,13 @@ export const ShopPage = () => {
     const dispatch = useAppDispatch();
     const { items: products, loading } = useAppSelector(state => state.products);
 
-
     const handleAddToCart = (productId: string) => {
-        const product = mockProducts.find((p) => p.id === productId);
+        const product = products.find((p: Product) => p.id === productId);
         if (product) {
             dispatch(addToCart({ product, quantity: 1 }));
         }
     };
+
     useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
