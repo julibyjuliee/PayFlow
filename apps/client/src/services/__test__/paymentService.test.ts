@@ -71,7 +71,6 @@ describe('PaymentService', () => {
                 address: 'Calle 1',
                 city: 'Bogotá',
                 postalCode: '110111',
-                totalAmount: 200000,
             });
             expect(tx).toEqual(mockTransaction);
         });
@@ -91,7 +90,6 @@ describe('PaymentService', () => {
                 address: 'Calle 1',
                 city: 'Bogotá',
                 postalCode: '110111',
-                totalAmount: 200000,
             })).rejects.toThrow('Error al procesar el pago');
         });
     });
@@ -121,7 +119,6 @@ describe('PaymentService', () => {
                     address: 'Calle 1',
                     city: 'Bogotá',
                     postalCode: '110111',
-                    totalAmount: 200000,
                 }
             );
             expect(tx).toEqual(mockTransaction);
