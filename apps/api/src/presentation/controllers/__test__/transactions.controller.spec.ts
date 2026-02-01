@@ -27,8 +27,8 @@ describe('TransactionsController', () => {
     currency: 'COP',
     status: TransactionStatus.PENDING,
     customerEmail: 'john@example.com',
-    wompiTransactionId: 'wompi-123',
-    wompiReference: 'ref-123',
+    wpTransactionId: 'wp-123',
+    wpReference: 'ref-123',
     paymentMethod: 'CARD',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -276,7 +276,7 @@ describe('TransactionsController', () => {
     });
   });
 
-  describe('handleWompiWebhook', () => {
+  describe('handleWpWebhook', () => {
     const mockWebhookPayload = {
       event: 'transaction.updated',
       data: {
@@ -306,7 +306,7 @@ describe('TransactionsController', () => {
         Result.ok(mockPaymentResult),
       );
 
-      const result = await controller.handleWompiWebhook(mockWebhookPayload);
+      const result = await controller.handleWpWebhook(mockWebhookPayload);
 
       expect(result).toEqual({ status: 'processed' });
       expect(getTransactionUseCase.execute).toHaveBeenCalledWith(
@@ -324,7 +324,7 @@ describe('TransactionsController', () => {
     it('should ignore webhook when event or transaction data is missing', async () => {
       const invalidPayload = { event: 'transaction.updated' };
 
-      const result = await controller.handleWompiWebhook(invalidPayload);
+      const result = await controller.handleWpWebhook(invalidPayload);
 
       expect(result).toEqual({ status: 'ignored' });
       expect(getTransactionUseCase.execute).not.toHaveBeenCalled();
@@ -335,7 +335,7 @@ describe('TransactionsController', () => {
         Result.fail(new Error('Transaction not found')) as any,
       );
 
-      const result = await controller.handleWompiWebhook(mockWebhookPayload);
+      const result = await controller.handleWpWebhook(mockWebhookPayload);
 
       expect(result).toEqual({ status: 'order_not_found' });
       expect(processPaymentUseCase.execute).not.toHaveBeenCalled();
@@ -350,7 +350,7 @@ describe('TransactionsController', () => {
         Result.ok(mockTransaction),
       );
 
-      const result = await controller.handleWompiWebhook(mockWebhookPayload);
+      const result = await controller.handleWpWebhook(mockWebhookPayload);
 
       expect(result).toEqual({ status: 'ignored' });
       expect(processPaymentUseCase.execute).not.toHaveBeenCalled();
@@ -375,7 +375,7 @@ describe('TransactionsController', () => {
         Result.ok(mockTransaction),
       );
 
-      const result = await controller.handleWompiWebhook(declinedPayload);
+      const result = await controller.handleWpWebhook(declinedPayload);
 
       expect(result).toEqual({ status: 'ignored' });
       expect(processPaymentUseCase.execute).not.toHaveBeenCalled();
@@ -393,7 +393,7 @@ describe('TransactionsController', () => {
         Result.fail(new Error('Payment processing failed')) as any,
       );
 
-      const result = await controller.handleWompiWebhook(mockWebhookPayload);
+      const result = await controller.handleWpWebhook(mockWebhookPayload);
 
       expect(result).toEqual({ status: 'ignored' });
     });
@@ -407,7 +407,7 @@ describe('TransactionsController', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => { });
 
-      const result = await controller.handleWompiWebhook(mockWebhookPayload);
+      const result = await controller.handleWpWebhook(mockWebhookPayload);
 
       expect(result).toEqual({ status: 'error' });
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -600,7 +600,7 @@ describe('TransactionsController', () => {
         toJSON: jest.fn().mockReturnValue({
           ...mockTransactionDto,
           status: TransactionStatus.APPROVED,
-          wompiTransactionId: 'wompi-456',
+          wpTransactionId: 'wp-456',
         }),
       } as any;
 
@@ -614,7 +614,7 @@ describe('TransactionsController', () => {
       const result = await controller.createTransaction(createTransactionDto);
 
       expect(result.status).toBe(TransactionStatus.APPROVED);
-      expect(result.wompiTransactionId).toBe('wompi-456');
+      expect(result.wpTransactionId).toBe('wp-456');
       expect(createTransactionUseCase.execute).toHaveBeenCalledTimes(1);
       expect(processPaymentUseCase.execute).toHaveBeenCalledTimes(1);
     });
@@ -653,12 +653,12 @@ describe('TransactionsController', () => {
         )
         .mockResolvedValueOnce(Result.ok(mockPaymentResult));
 
-      const firstResult = await controller.handleWompiWebhook(
+      const firstResult = await controller.handleWpWebhook(
         mockWebhookPayload,
       );
       expect(firstResult).toEqual({ status: 'ignored' });
 
-      const secondResult = await controller.handleWompiWebhook(
+      const secondResult = await controller.handleWpWebhook(
         mockWebhookPayload,
       );
       expect(secondResult).toEqual({ status: 'processed' });

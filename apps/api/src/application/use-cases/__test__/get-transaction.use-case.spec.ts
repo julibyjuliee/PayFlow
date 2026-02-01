@@ -140,9 +140,9 @@ describe('GetTransactionUseCase', () => {
             expect(transaction.isPending()).toBe(true);
         });
 
-        it('should handle approved transaction with wompi data', async () => {
+        it('should handle approved transaction with wp data', async () => {
             const approvedTransaction = Transaction.create(mockTransactionProps);
-            approvedTransaction.approve('wompi-transaction-123', 'wompi-ref-123');
+            approvedTransaction.approve('wp-transaction-123', 'wp-ref-123');
 
             const successResult = Result.ok(approvedTransaction);
             transactionRepository.findById.mockResolvedValue(successResult);
@@ -152,8 +152,8 @@ describe('GetTransactionUseCase', () => {
 
             expect(transaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
             expect(transaction.isPending()).toBe(false);
-            expect(transaction.wompiTransactionId).toBe('wompi-transaction-123');
-            expect(transaction.wompiReference).toBe('wompi-ref-123');
+            expect(transaction.wpTransactionId).toBe('wp-transaction-123');
+            expect(transaction.wpReference).toBe('wp-ref-123');
         });
 
         it('should handle declined transaction with error message', async () => {
@@ -267,7 +267,7 @@ describe('GetTransactionUseCase', () => {
         it('should handle transaction with payment method information', async () => {
             const transactionWithPayment = Transaction.create(mockTransactionProps);
             transactionWithPayment.updateStatus(TransactionStatus.APPROVED, {
-                transactionId: 'wompi-123',
+                transactionId: 'wp-123',
                 reference: 'ref-123',
                 paymentMethod: 'CARD',
             });
@@ -278,8 +278,8 @@ describe('GetTransactionUseCase', () => {
             const transaction = result.getValue();
 
             expect(transaction.paymentMethod).toBe('CARD');
-            expect(transaction.wompiTransactionId).toBe('wompi-123');
-            expect(transaction.wompiReference).toBe('ref-123');
+            expect(transaction.wpTransactionId).toBe('wp-123');
+            expect(transaction.wpReference).toBe('ref-123');
         });
     });
 
@@ -319,7 +319,7 @@ describe('GetTransactionUseCase', () => {
 
         it('should retrieve transaction and verify its state', async () => {
             const transaction = Transaction.create(mockTransactionProps);
-            transaction.approve('wompi-final-123', 'ref-final-123');
+            transaction.approve('wp-final-123', 'ref-final-123');
 
             transactionRepository.findById.mockResolvedValue(Result.ok(transaction));
 
@@ -329,7 +329,7 @@ describe('GetTransactionUseCase', () => {
             // Verify transaction state
             expect(retrievedTransaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
             expect(retrievedTransaction.isPending()).toBe(false);
-            expect(retrievedTransaction.wompiTransactionId).toBe('wompi-final-123');
+            expect(retrievedTransaction.wpTransactionId).toBe('wp-final-123');
         });
 
         it('should retrieve transaction and verify immutability', async () => {
@@ -418,7 +418,7 @@ describe('GetTransactionUseCase', () => {
                 const transaction = Transaction.create(mockTransactionProps);
 
                 if (status === TransactionStatus.APPROVED) {
-                    transaction.approve('wompi-123', 'ref-123');
+                    transaction.approve('wp-123', 'ref-123');
                 } else if (status === TransactionStatus.DECLINED) {
                     transaction.decline('Test decline');
                 } else if (status === TransactionStatus.ERROR) {
@@ -452,7 +452,7 @@ describe('GetTransactionUseCase', () => {
 
         it('should retrieve approved transaction with complete serialization', async () => {
             const transaction = Transaction.create(mockTransactionProps);
-            transaction.approve('wompi-serialization-123', 'ref-serialization-123');
+            transaction.approve('wp-serialization-123', 'ref-serialization-123');
 
             transactionRepository.findById.mockResolvedValue(Result.ok(transaction));
 
@@ -460,8 +460,8 @@ describe('GetTransactionUseCase', () => {
             const json = result.getValue().toJSON();
 
             expect(json.status).toBe(TransactionStatus.APPROVED);
-            expect(json.wompiTransactionId).toBe('wompi-serialization-123');
-            expect(json.wompiReference).toBe('ref-serialization-123');
+            expect(json.wpTransactionId).toBe('wp-serialization-123');
+            expect(json.wpReference).toBe('ref-serialization-123');
         });
     });
 });

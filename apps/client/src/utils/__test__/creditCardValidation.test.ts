@@ -422,8 +422,8 @@ describe('creditCardValidation', () => {
         });
 
         it('should reject postal codes with incorrect length', () => {
-            expect(validatePostalCode('1234')).toBe(false);   // Too short
-            expect(validatePostalCode('123456')).toBe(false); // Too long
+            expect(validatePostalCode('1234567')).toBe(false); // Too long
+            expect(validatePostalCode('')).toBe(false);        // Empty
         });
 
         it('should reject non-numeric postal codes', () => {

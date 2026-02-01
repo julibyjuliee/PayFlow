@@ -3,15 +3,15 @@
  */
 
 import { ConfigService } from '@nestjs/config';
-import { WompiClient } from './wompi.client';
+import { WpClient } from './wp.client';
 import axios from 'axios';
 
 // Mock de axios
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('WompiClient', () => {
-    let wompiClient: WompiClient;
+describe('WpClient', () => {
+    let wpClient: WpClient;
     let configService: jest.Mocked<ConfigService>;
     let mockAxiosInstance: any;
 
@@ -28,7 +28,7 @@ describe('WompiClient', () => {
         configService = {
             get: jest.fn((key: string) => {
                 const config: { [key: string]: string } = {
-                    WP_BASE_URL: 'https://api-sandbox.co.uat.wompi.dev/v1',
+                    WP_BASE_URL: 'https://api-sandbox.co.uat.wp.dev/v1',
                     WP_PUBLIC_KEY: 'pub_test_123456',
                     WP_PRIVATE_KEY: 'prv_test_123456',
                     APP_URL: 'http://localhost:5173',
@@ -37,7 +37,7 @@ describe('WompiClient', () => {
             }),
         } as any;
 
-        wompiClient = new WompiClient(configService);
+        wpClient = new WpClient(configService);
     });
 
     afterEach(() => {
@@ -45,10 +45,10 @@ describe('WompiClient', () => {
     });
 
     describe('constructor', () => {
-        it('should create WompiClient instance with correct configuration', () => {
-            expect(wompiClient).toBeDefined();
+        it('should create WpClient instance with correct configuration', () => {
+            expect(wpClient).toBeDefined();
             expect(mockedAxios.create).toHaveBeenCalledWith({
-                baseURL: 'https://api-sandbox.co.uat.wompi.dev/v1',
+                baseURL: 'https://api-sandbox.co.uat.wp.dev/v1',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -60,10 +60,10 @@ describe('WompiClient', () => {
                 get: jest.fn().mockReturnValue(undefined),
             } as any;
 
-            new WompiClient(emptyConfigService);
+            new WpClient(emptyConfigService);
 
             expect(mockedAxios.create).toHaveBeenCalledWith({
-                baseURL: 'https://api-sandbox.co.uat.wompi.dev/v1',
+                baseURL: 'https://api-sandbox.co.uat.wp.dev/v1',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -97,7 +97,7 @@ describe('WompiClient', () => {
         const mockTransactionResponse = {
             data: {
                 data: {
-                    id: 'wompi-trans-123',
+                    id: 'wp-trans-123',
                     status: 'APPROVED',
                     reference: 'ref-123',
                     amount_in_cents: 100000,
@@ -113,7 +113,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.get.mockResolvedValue(mockAcceptanceTokenResponse);
             mockAxiosInstance.post.mockResolvedValue(mockTransactionResponse);
 
-            const result = await wompiClient.processPayment(mockPaymentRequest);
+            const result = await wpClient.processPayment(mockPaymentRequest);
 
             expect(result.isSuccess()).toBe(true);
             expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -127,7 +127,7 @@ describe('WompiClient', () => {
                     currency: 'COP',
                     customer_email: 'test@example.com',
                     reference: 'ref-123',
-                    redirect_url: 'http://localhost:5173',
+                    redirect_url: 'http://localhost:5173/payment-result',
                     signature: expect.any(String),
                     payment_method: {
                         type: 'CARD',
@@ -143,7 +143,7 @@ describe('WompiClient', () => {
             );
 
             const paymentResponse = result.getValue();
-            expect(paymentResponse.id).toBe('wompi-trans-123');
+            expect(paymentResponse.id).toBe('wp-trans-123');
             expect(paymentResponse.status).toBe('APPROVED');
             expect(paymentResponse.amount).toBe(1000);
         });
@@ -160,7 +160,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.get.mockResolvedValue(mockAcceptanceTokenResponse);
             mockAxiosInstance.post.mockResolvedValue(mockTransactionResponse);
 
-            const result = await wompiClient.processPayment(requestWithoutToken);
+            const result = await wpClient.processPayment(requestWithoutToken);
 
             expect(result.isSuccess()).toBe(true);
             expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -187,7 +187,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            const result = await wompiClient.processPayment(mockPaymentRequest);
+            const result = await wpClient.processPayment(mockPaymentRequest);
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe('Payment declined by issuer');
@@ -196,7 +196,7 @@ describe('WompiClient', () => {
         it('should handle acceptance token fetch errors', async () => {
             mockAxiosInstance.get.mockRejectedValue(new Error('Network error'));
 
-            const result = await wompiClient.processPayment(mockPaymentRequest);
+            const result = await wpClient.processPayment(mockPaymentRequest);
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe(
@@ -222,7 +222,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            await wompiClient.processPayment(mockPaymentRequest);
+            await wpClient.processPayment(mockPaymentRequest);
 
             expect(consoleSpy).toHaveBeenCalledWith(
                 '📋 Validation Messages:',
@@ -236,7 +236,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.get.mockResolvedValue(mockAcceptanceTokenResponse);
             mockAxiosInstance.post.mockRejectedValue(new Error());
 
-            const result = await wompiClient.processPayment(mockPaymentRequest);
+            const result = await wpClient.processPayment(mockPaymentRequest);
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe(
@@ -253,7 +253,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.get.mockResolvedValue(mockAcceptanceTokenResponse);
             mockAxiosInstance.post.mockResolvedValue(mockTransactionResponse);
 
-            await wompiClient.processPayment(requestWithDecimal);
+            await wpClient.processPayment(requestWithDecimal);
 
             expect(mockAxiosInstance.post).toHaveBeenCalledWith(
                 '/transactions',
@@ -269,7 +269,7 @@ describe('WompiClient', () => {
         const mockStatusResponse = {
             data: {
                 data: {
-                    id: 'wompi-trans-123',
+                    id: 'wp-trans-123',
                     status: 'APPROVED',
                     reference: 'ref-123',
                     amount_in_cents: 100000,
@@ -284,11 +284,11 @@ describe('WompiClient', () => {
         it('should get transaction status successfully', async () => {
             mockAxiosInstance.get.mockResolvedValue(mockStatusResponse);
 
-            const result = await wompiClient.getTransactionStatus('wompi-trans-123');
+            const result = await wpClient.getTransactionStatus('wp-trans-123');
 
             expect(result.isSuccess()).toBe(true);
             expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-                '/transactions/wompi-trans-123',
+                '/transactions/wp-trans-123',
                 {
                     headers: {
                         Authorization: 'Bearer prv_test_123456',
@@ -297,7 +297,7 @@ describe('WompiClient', () => {
             );
 
             const transaction = result.getValue();
-            expect(transaction.id).toBe('wompi-trans-123');
+            expect(transaction.id).toBe('wp-trans-123');
             expect(transaction.status).toBe('APPROVED');
             expect(transaction.amount).toBe(1000);
         });
@@ -313,7 +313,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            const result = await wompiClient.getTransactionStatus('invalid-id');
+            const result = await wpClient.getTransactionStatus('invalid-id');
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe('Transaction not found');
@@ -322,7 +322,7 @@ describe('WompiClient', () => {
         it('should use default error message when no specific message is provided', async () => {
             mockAxiosInstance.get.mockRejectedValue(new Error());
 
-            const result = await wompiClient.getTransactionStatus('trans-123');
+            const result = await wpClient.getTransactionStatus('trans-123');
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe(
@@ -353,7 +353,7 @@ describe('WompiClient', () => {
         it('should create payment source successfully', async () => {
             mockAxiosInstance.post.mockResolvedValue(mockPaymentSourceResponse);
 
-            const result = await wompiClient.createPaymentSource(mockCardInfo);
+            const result = await wpClient.createPaymentSource(mockCardInfo);
 
             expect(result.isSuccess()).toBe(true);
             expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -382,7 +382,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            const result = await wompiClient.createPaymentSource(mockCardInfo);
+            const result = await wpClient.createPaymentSource(mockCardInfo);
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe('Invalid card number');
@@ -391,7 +391,7 @@ describe('WompiClient', () => {
         it('should use default error message when no specific message is provided', async () => {
             mockAxiosInstance.post.mockRejectedValue(new Error());
 
-            const result = await wompiClient.createPaymentSource(mockCardInfo);
+            const result = await wpClient.createPaymentSource(mockCardInfo);
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe(
@@ -408,7 +408,7 @@ describe('WompiClient', () => {
                     name: 'Test Merchant',
                     presigned_acceptance: {
                         acceptance_token: 'token-123',
-                        permalink: 'https://wompi.co/terms',
+                        permalink: 'https://wp.co/terms',
                         type: 'END_USER_POLICY',
                     },
                 },
@@ -418,7 +418,7 @@ describe('WompiClient', () => {
         it('should get merchant info successfully', async () => {
             mockAxiosInstance.get.mockResolvedValue(mockMerchantResponse);
 
-            const result = await wompiClient.getMerchantInfo();
+            const result = await wpClient.getMerchantInfo();
 
             expect(result.isSuccess()).toBe(true);
             expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -441,7 +441,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            const result = await wompiClient.getMerchantInfo();
+            const result = await wpClient.getMerchantInfo();
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe('Merchant not found');
@@ -450,7 +450,7 @@ describe('WompiClient', () => {
         it('should use default error message when no specific message is provided', async () => {
             mockAxiosInstance.get.mockRejectedValue(new Error());
 
-            const result = await wompiClient.getMerchantInfo();
+            const result = await wpClient.getMerchantInfo();
 
             expect(result.isFailure()).toBe(true);
             expect(result.getError().message).toBe(
@@ -460,11 +460,11 @@ describe('WompiClient', () => {
     });
 
     describe('mapToPaymentResponse', () => {
-        it('should correctly map Wompi response to PaymentResponse', async () => {
+        it('should correctly map WP response to PaymentResponse', async () => {
             const mockTransactionResponse = {
                 data: {
                     data: {
-                        id: 'wompi-123',
+                        id: 'wp-123',
                         status: 'APPROVED',
                         reference: 'ref-456',
                         amount_in_cents: 250000,
@@ -489,7 +489,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.get.mockResolvedValue(mockAcceptanceTokenResponse);
             mockAxiosInstance.post.mockResolvedValue(mockTransactionResponse);
 
-            const result = await wompiClient.processPayment({
+            const result = await wpClient.processPayment({
                 amount: 2500,
                 currency: 'COP',
                 customerEmail: 'test@example.com',
@@ -501,7 +501,7 @@ describe('WompiClient', () => {
 
             expect(result.isSuccess()).toBe(true);
             const response = result.getValue();
-            expect(response.id).toBe('wompi-123');
+            expect(response.id).toBe('wp-123');
             expect(response.status).toBe('APPROVED');
             expect(response.reference).toBe('ref-456');
             expect(response.amount).toBe(2500);
@@ -515,7 +515,7 @@ describe('WompiClient', () => {
             const mockPendingTransactionResponse = {
                 data: {
                     data: {
-                        id: 'wompi-123',
+                        id: 'wp-123',
                         status: 'PENDING',
                         reference: 'ref-456',
                         amount_in_cents: 250000,
@@ -540,7 +540,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.get.mockResolvedValue(mockAcceptanceTokenResponse);
             mockAxiosInstance.post.mockResolvedValue(mockPendingTransactionResponse);
 
-            const result = await wompiClient.processPayment({
+            const result = await wpClient.processPayment({
                 amount: 2500,
                 currency: 'COP',
                 customerEmail: 'test@example.com',
@@ -560,7 +560,7 @@ describe('WompiClient', () => {
             const mockTransactionResponse = {
                 data: {
                     data: {
-                        id: 'wompi-123',
+                        id: 'wp-123',
                         status: 'APPROVED',
                         reference: 'ref-456',
                         amount_in_cents: 123456,
@@ -580,7 +580,7 @@ describe('WompiClient', () => {
             });
             mockAxiosInstance.post.mockResolvedValue(mockTransactionResponse);
 
-            const result = await wompiClient.processPayment({
+            const result = await wpClient.processPayment({
                 amount: 1234.56,
                 currency: 'COP',
                 customerEmail: 'test@example.com',
@@ -599,7 +599,7 @@ describe('WompiClient', () => {
                 message: 'timeout of 5000ms exceeded',
             });
 
-            const result = await wompiClient.processPayment({
+            const result = await wpClient.processPayment({
                 amount: 1000,
                 currency: 'COP',
                 customerEmail: 'test@example.com',
@@ -617,7 +617,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            const result = await wompiClient.processPayment({
+            const result = await wpClient.processPayment({
                 amount: 1000,
                 currency: 'COP',
                 customerEmail: 'test@example.com',
@@ -644,7 +644,7 @@ describe('WompiClient', () => {
             mockAxiosInstance.post.mockResolvedValue({
                 data: {
                     data: {
-                        id: 'wompi-123',
+                        id: 'wp-123',
                         status: 'APPROVED',
                         reference: 'ref-123',
                         amount_in_cents: 0,
@@ -655,7 +655,7 @@ describe('WompiClient', () => {
                 },
             });
 
-            const result = await wompiClient.processPayment({
+            const result = await wpClient.processPayment({
                 amount: 0,
                 currency: 'COP',
                 customerEmail: 'test@example.com',

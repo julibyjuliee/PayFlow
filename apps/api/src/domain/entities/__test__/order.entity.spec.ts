@@ -65,14 +65,14 @@ describe('Order Entity', () => {
         testData.city,
         testData.postalCode,
         testData.customerEmail,
-        'wompi-tx-123',
-        'wompi-ref-456',
+        'wp-tx-123',
+        'wp-ref-456',
         'CARD',
         'Test error',
       );
 
-      expect(orderWithOptionals.wompiTransactionId).toBe('wompi-tx-123');
-      expect(orderWithOptionals.wompiReference).toBe('wompi-ref-456');
+      expect(orderWithOptionals.wpTransactionId).toBe('wp-tx-123');
+      expect(orderWithOptionals.wpReference).toBe('wp-ref-456');
       expect(orderWithOptionals.paymentMethod).toBe('CARD');
       expect(orderWithOptionals.errorMessage).toBe('Test error');
     });
@@ -134,7 +134,7 @@ describe('Order Entity', () => {
     });
 
     it('should correctly identify approved status', () => {
-      order.approve('wompi-tx-123', 'wompi-ref-456');
+      order.approve('wp-tx-123', 'wp-ref-456');
       expect(order.isPending()).toBe(false);
       expect(order.isApproved()).toBe(true);
       expect(order.isFinal()).toBe(true);
@@ -151,13 +151,13 @@ describe('Order Entity', () => {
   describe('updateStatus', () => {
     it('should update status from PENDING to APPROVED', () => {
       order.updateStatus(TransactionStatus.APPROVED, {
-        transactionId: 'wompi-tx-123',
-        reference: 'wompi-ref-456',
+        transactionId: 'wp-tx-123',
+        reference: 'wp-ref-456',
       });
 
       expect(order.getStatusValue()).toBe(TransactionStatus.APPROVED);
-      expect(order.wompiTransactionId).toBe('wompi-tx-123');
-      expect(order.wompiReference).toBe('wompi-ref-456');
+      expect(order.wpTransactionId).toBe('wp-tx-123');
+      expect(order.wpReference).toBe('wp-ref-456');
     });
 
     it('should update status from PENDING to DECLINED', () => {
@@ -180,30 +180,30 @@ describe('Order Entity', () => {
 
     it('should update status with payment method', () => {
       order.updateStatus(TransactionStatus.APPROVED, {
-        transactionId: 'wompi-tx-123',
-        reference: 'wompi-ref-456',
+        transactionId: 'wp-tx-123',
+        reference: 'wp-ref-456',
         paymentMethod: 'CARD',
       });
 
       expect(order.paymentMethod).toBe('CARD');
     });
 
-    it('should update status with all wompiData fields', () => {
+    it('should update status with all wpData fields', () => {
       order.updateStatus(TransactionStatus.APPROVED, {
-        transactionId: 'wompi-tx-123',
-        reference: 'wompi-ref-456',
+        transactionId: 'wp-tx-123',
+        reference: 'wp-ref-456',
         paymentMethod: 'NEQUI',
         errorMessage: 'Test message',
       });
 
-      expect(order.wompiTransactionId).toBe('wompi-tx-123');
-      expect(order.wompiReference).toBe('wompi-ref-456');
+      expect(order.wpTransactionId).toBe('wp-tx-123');
+      expect(order.wpReference).toBe('wp-ref-456');
       expect(order.paymentMethod).toBe('NEQUI');
       expect(order.errorMessage).toBe('Test message');
     });
 
     it('should throw InvalidTransactionStateException when transition is not allowed', () => {
-      order.approve('wompi-tx-123', 'wompi-ref-456');
+      order.approve('wp-tx-123', 'wp-ref-456');
 
       expect(() => {
         order.updateStatus(TransactionStatus.DECLINED);
@@ -236,7 +236,7 @@ describe('Order Entity', () => {
     });
 
     it('should not allow transition from final states', () => {
-      order.approve('wompi-tx-123', 'wompi-ref-456');
+      order.approve('wp-tx-123', 'wp-ref-456');
 
       expect(() => {
         order.updateStatus(TransactionStatus.PENDING);
@@ -250,18 +250,18 @@ describe('Order Entity', () => {
 
   describe('approve', () => {
     it('should approve order with transaction details', () => {
-      order.approve('wompi-tx-789', 'wompi-ref-abc');
+      order.approve('wp-tx-789', 'wp-ref-abc');
 
       expect(order.getStatusValue()).toBe(TransactionStatus.APPROVED);
-      expect(order.wompiTransactionId).toBe('wompi-tx-789');
-      expect(order.wompiReference).toBe('wompi-ref-abc');
+      expect(order.wpTransactionId).toBe('wp-tx-789');
+      expect(order.wpReference).toBe('wp-ref-abc');
     });
 
     it('should throw error when trying to approve already approved order', () => {
-      order.approve('wompi-tx-123', 'wompi-ref-456');
+      order.approve('wp-tx-123', 'wp-ref-456');
 
       expect(() => {
-        order.approve('wompi-tx-789', 'wompi-ref-abc');
+        order.approve('wp-tx-789', 'wp-ref-abc');
       }).toThrow(InvalidTransactionStateException);
     });
 
@@ -269,7 +269,7 @@ describe('Order Entity', () => {
       order.decline('Insufficient funds');
 
       expect(() => {
-        order.approve('wompi-tx-123', 'wompi-ref-456');
+        order.approve('wp-tx-123', 'wp-ref-456');
       }).toThrow(InvalidTransactionStateException);
     });
   });
@@ -291,7 +291,7 @@ describe('Order Entity', () => {
     });
 
     it('should throw error when trying to decline approved order', () => {
-      order.approve('wompi-tx-123', 'wompi-ref-456');
+      order.approve('wp-tx-123', 'wp-ref-456');
 
       expect(() => {
         order.decline('Cannot decline approved order');
@@ -316,7 +316,7 @@ describe('Order Entity', () => {
     });
 
     it('should throw error when trying to mark final state as error', () => {
-      order.approve('wompi-tx-123', 'wompi-ref-456');
+      order.approve('wp-tx-123', 'wp-ref-456');
 
       expect(() => {
         order.markAsError('Cannot mark as error');
@@ -327,8 +327,8 @@ describe('Order Entity', () => {
   describe('toJSON', () => {
     it('should serialize order to JSON with all fields', () => {
       order.updateStatus(TransactionStatus.APPROVED, {
-        transactionId: 'wompi-tx-123',
-        reference: 'wompi-ref-456',
+        transactionId: 'wp-tx-123',
+        reference: 'wp-ref-456',
         paymentMethod: 'CARD',
       });
 
@@ -346,8 +346,8 @@ describe('Order Entity', () => {
         city: testData.city,
         postalCode: testData.postalCode,
         customerEmail: testData.customerEmail,
-        wompiTransactionId: 'wompi-tx-123',
-        wompiReference: 'wompi-ref-456',
+        wpTransactionId: 'wp-tx-123',
+        wpReference: 'wp-ref-456',
         paymentMethod: 'CARD',
         errorMessage: undefined,
         createdAt: order.createdAt,
@@ -369,8 +369,8 @@ describe('Order Entity', () => {
         city: testData.city,
         postalCode: testData.postalCode,
         customerEmail: testData.customerEmail,
-        wompiTransactionId: undefined,
-        wompiReference: undefined,
+        wpTransactionId: undefined,
+        wpReference: undefined,
         paymentMethod: undefined,
         errorMessage: undefined,
         createdAt: order.createdAt,
@@ -384,8 +384,8 @@ describe('Order Entity', () => {
 
       expect(json.status).toBe(TransactionStatus.DECLINED);
       expect(json.errorMessage).toBe('Card expired');
-      expect(json.wompiTransactionId).toBeUndefined();
-      expect(json.wompiReference).toBeUndefined();
+      expect(json.wpTransactionId).toBeUndefined();
+      expect(json.wpReference).toBeUndefined();
     });
 
     it('should convert totalPrice to amount number', () => {

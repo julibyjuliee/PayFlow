@@ -27,29 +27,31 @@ interface CreateTransactionRequest {
 export interface Transaction {
     id: string;
     status: 'APPROVED' | 'PENDING' | 'DECLINED' | 'ERROR';
+    amount?: number;
+    errorMessage?: string;
 }
 
 class PaymentServiceClass {
-    private readonly wompiApiUrl: string;
-    private readonly wompiPublicKey: string;
+    private readonly wpApiUrl: string;
+    private readonly wpPublicKey: string;
     private readonly apiUrl: string;
 
     constructor() {
-        this.wompiApiUrl = import.meta.env.VITE_WP_API_URL;
-        this.wompiPublicKey = import.meta.env.VITE_WP_PUBLIC_KEY;
+        this.wpApiUrl = import.meta.env.VITE_WP_API_URL;
+        this.wpPublicKey = import.meta.env.VITE_WP_PUBLIC_KEY;
         this.apiUrl = import.meta.env.VITE_API_URL;
     }
 
     /**
-     * Tokenize credit card with Wompi
+     * Tokenize credit card with WP
      * @throws Error if tokenization fails
      */
     async tokenizeCard(request: TokenizeCardRequest): Promise<string> {
         try {
-            const response = await fetch(this.wompiApiUrl, {
+            const response = await fetch(this.wpApiUrl, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${this.wompiPublicKey}`,
+                    Authorization: `Bearer ${this.wpPublicKey}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -63,7 +65,7 @@ class PaymentServiceClass {
 
             if (!response.ok) {
                 const errorDetail = await response.json();
-                console.error('Error en tokenización Wompi:', errorDetail);
+                console.error('Error en tokenización WP:', errorDetail);
                 throw new Error('No se pudo procesar la tarjeta. Por favor verifica los datos.');
             }
 

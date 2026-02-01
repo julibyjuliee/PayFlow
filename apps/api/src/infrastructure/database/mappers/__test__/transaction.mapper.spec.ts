@@ -52,16 +52,16 @@ describe('TransactionMapper', () => {
       orderEntity.address = 'Carrera 50';
       orderEntity.city = 'Medellín';
       orderEntity.postalCode = '050001';
-      orderEntity.wompiTransactionId = 'wompi-tx-123';
-      orderEntity.wompiReference = 'wompi-ref-456';
+      orderEntity.wpTransactionId = 'wp-tx-123';
+      orderEntity.wpReference = 'wp-ref-456';
       orderEntity.paymentMethod = 'CARD';
       orderEntity.errorMessage = 'Test error';
       orderEntity.createdAt = new Date('2024-02-15');
 
       const domainTransaction = TransactionMapper.toDomain(orderEntity);
 
-      expect(domainTransaction.wompiTransactionId).toBe('wompi-tx-123');
-      expect(domainTransaction.wompiReference).toBe('wompi-ref-456');
+      expect(domainTransaction.wpTransactionId).toBe('wp-tx-123');
+      expect(domainTransaction.wpReference).toBe('wp-ref-456');
       expect(domainTransaction.paymentMethod).toBe('CARD');
       expect(domainTransaction.errorMessage).toBe('Test error');
     });
@@ -139,16 +139,16 @@ expect(domainTransaction.customerEmail).toBe("");
       orderEntity.address = 'Address';
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
-      orderEntity.wompiTransactionId = undefined;
-      orderEntity.wompiReference = undefined;
+      orderEntity.wpTransactionId = undefined;
+      orderEntity.wpReference = undefined;
       orderEntity.paymentMethod = undefined;
       orderEntity.errorMessage = undefined;
       orderEntity.createdAt = new Date();
 
       const domainTransaction = TransactionMapper.toDomain(orderEntity);
 
-      expect(domainTransaction.wompiTransactionId).toBeUndefined();
-      expect(domainTransaction.wompiReference).toBeUndefined();
+      expect(domainTransaction.wpTransactionId).toBeUndefined();
+      expect(domainTransaction.wpReference).toBeUndefined();
       expect(domainTransaction.paymentMethod).toBeUndefined();
       expect(domainTransaction.errorMessage).toBeUndefined();
     });
@@ -166,16 +166,16 @@ expect(domainTransaction.customerEmail).toBe("");
       orderEntity.address = 'Address';
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
-      orderEntity.wompiTransactionId = undefined;
-      orderEntity.wompiReference = undefined;
+      orderEntity.wpTransactionId = undefined;
+      orderEntity.wpReference = undefined;
       orderEntity.paymentMethod = undefined;
       orderEntity.errorMessage = undefined;
       orderEntity.createdAt = new Date();
 
       const domainTransaction = TransactionMapper.toDomain(orderEntity);
 
-      expect(domainTransaction.wompiTransactionId).toBeUndefined();
-      expect(domainTransaction.wompiReference).toBeUndefined();
+      expect(domainTransaction.wpTransactionId).toBeUndefined();
+      expect(domainTransaction.wpReference).toBeUndefined();
       expect(domainTransaction.paymentMethod).toBeUndefined();
       expect(domainTransaction.errorMessage).toBeUndefined();
     });
@@ -296,8 +296,8 @@ expect(domainTransaction.customerEmail).toBe("");
         'Carrera 50',
         'Medellín',
         '050001',
-        'wompi-tx-123',
-        'wompi-ref-456',
+        'wp-tx-123',
+        'wp-ref-456',
         'CARD',
         'Test error',
         new Date('2024-01-01'),
@@ -305,8 +305,8 @@ expect(domainTransaction.customerEmail).toBe("");
 
       const orderEntity = TransactionMapper.toEntity(domainTransaction);
 
-      expect(orderEntity.wompiTransactionId).toBe('wompi-tx-123');
-      expect(orderEntity.wompiReference).toBe('wompi-ref-456');
+      expect(orderEntity.wpTransactionId).toBe('wp-tx-123');
+      expect(orderEntity.wpReference).toBe('wp-ref-456');
       expect(orderEntity.paymentMethod).toBe('CARD');
       expect(orderEntity.errorMessage).toBe('Test error');
       expect(orderEntity.createdAt).toEqual(new Date('2024-01-01'));
@@ -379,8 +379,8 @@ expect(domainTransaction.customerEmail).toBe("");
 
       const orderEntity = TransactionMapper.toEntity(domainTransaction);
 
-      expect(orderEntity.wompiTransactionId).toBeUndefined();
-      expect(orderEntity.wompiReference).toBeUndefined();
+      expect(orderEntity.wpTransactionId).toBeUndefined();
+      expect(orderEntity.wpReference).toBeUndefined();
       expect(orderEntity.paymentMethod).toBeUndefined();
       expect(orderEntity.errorMessage).toBeUndefined();
     });
@@ -472,8 +472,8 @@ expect(domainTransaction.customerEmail).toBe("");
         'Calle 45 #12-34',
         'Cali',
         '760001',
-        'wompi-tx-789',
-        'wompi-ref-abc',
+        'wp-tx-789',
+        'wp-ref-abc',
         'NEQUI',
         undefined,
         new Date('2024-01-15T08:00:00Z'),
@@ -494,8 +494,8 @@ expect(domainTransaction.customerEmail).toBe("");
       expect(convertedTransaction.address).toBe(originalTransaction.address);
       expect(convertedTransaction.city).toBe(originalTransaction.city);
       expect(convertedTransaction.postalCode).toBe(originalTransaction.postalCode);
-      expect(convertedTransaction.wompiTransactionId).toBe(originalTransaction.wompiTransactionId);
-      expect(convertedTransaction.wompiReference).toBe(originalTransaction.wompiReference);
+      expect(convertedTransaction.wpTransactionId).toBe(originalTransaction.wpTransactionId);
+      expect(convertedTransaction.wpReference).toBe(originalTransaction.wpReference);
       expect(convertedTransaction.paymentMethod).toBe(originalTransaction.paymentMethod);
       expect(convertedTransaction.createdAt).toEqual(originalTransaction.createdAt);
     });
@@ -513,8 +513,8 @@ expect(domainTransaction.customerEmail).toBe("");
       originalEntity.address = 'Carrera 10 #20-30';
       originalEntity.city = 'Barranquilla';
       originalEntity.postalCode = '080001';
-      originalEntity.wompiTransactionId = 'wompi-456';
-      originalEntity.wompiReference = 'ref-789';
+      originalEntity.wpTransactionId = 'wp-456';
+      originalEntity.wpReference = 'ref-789';
       originalEntity.paymentMethod = 'PSE';
       originalEntity.errorMessage = 'Payment declined';
       originalEntity.createdAt = new Date('2024-02-20T14:30:00Z');
@@ -533,8 +533,8 @@ expect(domainTransaction.customerEmail).toBe("");
       expect(convertedEntity.address).toBe(originalEntity.address);
       expect(convertedEntity.city).toBe(originalEntity.city);
       expect(convertedEntity.postalCode).toBe(originalEntity.postalCode);
-      expect(convertedEntity.wompiTransactionId).toBe(originalEntity.wompiTransactionId);
-      expect(convertedEntity.wompiReference).toBe(originalEntity.wompiReference);
+      expect(convertedEntity.wpTransactionId).toBe(originalEntity.wpTransactionId);
+      expect(convertedEntity.wpReference).toBe(originalEntity.wpReference);
       expect(convertedEntity.paymentMethod).toBe(originalEntity.paymentMethod);
       expect(convertedEntity.errorMessage).toBe(originalEntity.errorMessage);
       expect(convertedEntity.createdAt).toEqual(originalEntity.createdAt);
@@ -623,8 +623,8 @@ expect(domainTransaction.customerEmail).toBe("");
       orderEntity.address = 'Address';
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
-      orderEntity.wompiTransactionId = '';
-      orderEntity.wompiReference = '';
+      orderEntity.wpTransactionId = '';
+      orderEntity.wpReference = '';
       orderEntity.paymentMethod = '';
       orderEntity.errorMessage = '';
       orderEntity.createdAt = new Date();
@@ -632,8 +632,8 @@ expect(domainTransaction.customerEmail).toBe("");
       const domainTransaction = TransactionMapper.toDomain(orderEntity);
 
       // Empty strings are NOT null/undefined, so they pass through
-      expect(domainTransaction.wompiTransactionId).toBe('');
-      expect(domainTransaction.wompiReference).toBe('');
+      expect(domainTransaction.wpTransactionId).toBe('');
+      expect(domainTransaction.wpReference).toBe('');
       expect(domainTransaction.paymentMethod).toBe('');
       expect(domainTransaction.errorMessage).toBe('');
     });
@@ -807,13 +807,13 @@ expect(domainTransaction.customerEmail).toBe("");
       orderEntity.address = 'Address';
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
-      orderEntity.wompiTransactionId = undefined;
+      orderEntity.wpTransactionId = undefined;
       orderEntity.createdAt = new Date();
 
       const domainTransaction = TransactionMapper.toDomain(orderEntity);
 
       // ?? converts null to undefined
-      expect(domainTransaction.wompiTransactionId).toBeUndefined();
+      expect(domainTransaction.wpTransactionId).toBeUndefined();
     });
 
     it('should preserve empty string (not null/undefined)', () => {
@@ -829,12 +829,12 @@ expect(domainTransaction.customerEmail).toBe("");
       orderEntity.address = 'Address';
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
-      orderEntity.wompiTransactionId = '';
+      orderEntity.wpTransactionId = '';
       orderEntity.createdAt = new Date();
 
       const domainTransaction = TransactionMapper.toDomain(orderEntity);
 
-      expect(domainTransaction.wompiTransactionId).toBe('');
+      expect(domainTransaction.wpTransactionId).toBe('');
     });
   });
 });

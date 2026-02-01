@@ -1,6 +1,6 @@
 import { Transaction, TransactionProps } from '../transaction.entity';
 import { Money } from '../../value-objects/money';
-import { TransactionStatus, TransactionStatusVO } from '../../value-objects/transaction-status';
+import { TransactionStatus } from '../../value-objects/transaction-status';
 import { InvalidTransactionStateException } from '../../../shared/exceptions/domain.exception';
 
 describe('Transaction Entity', () => {
@@ -35,11 +35,11 @@ describe('Transaction Entity', () => {
       expect(transaction.isPending()).toBe(true);
     });
 
-    it('should initialize without wompi data', () => {
+    it('should initialize without wp data', () => {
       const transaction = Transaction.create(mockProps);
 
-      expect(transaction.wompiTransactionId).toBeUndefined();
-      expect(transaction.wompiReference).toBeUndefined();
+      expect(transaction.wpTransactionId).toBeUndefined();
+      expect(transaction.wpReference).toBeUndefined();
       expect(transaction.paymentMethod).toBeUndefined();
       expect(transaction.errorMessage).toBeUndefined();
     });
@@ -69,7 +69,7 @@ describe('Transaction Entity', () => {
 
     it('should return false when status is not PENDING', () => {
       const transaction = Transaction.create(mockProps);
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       expect(transaction.isPending()).toBe(false);
     });
@@ -78,27 +78,27 @@ describe('Transaction Entity', () => {
   describe('updateStatus', () => {
     it('should update status from PENDING to APPROVED', () => {
       const transaction = Transaction.create(mockProps);
-      const wompiData = {
-        transactionId: 'wompi-123',
+      const wpData = {
+        transactionId: 'wp-123',
         reference: 'ref-123',
         paymentMethod: 'CARD',
       };
 
-      transaction.updateStatus(TransactionStatus.APPROVED, wompiData);
+      transaction.updateStatus(TransactionStatus.APPROVED, wpData);
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
-      expect(transaction.wompiTransactionId).toBe('wompi-123');
-      expect(transaction.wompiReference).toBe('ref-123');
+      expect(transaction.wpTransactionId).toBe('wp-123');
+      expect(transaction.wpReference).toBe('ref-123');
       expect(transaction.paymentMethod).toBe('CARD');
     });
 
     it('should update status from PENDING to DECLINED', () => {
       const transaction = Transaction.create(mockProps);
-      const wompiData = {
+      const wpData = {
         errorMessage: 'Insufficient funds',
       };
 
-      transaction.updateStatus(TransactionStatus.DECLINED, wompiData);
+      transaction.updateStatus(TransactionStatus.DECLINED, wpData);
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.DECLINED);
       expect(transaction.errorMessage).toBe('Insufficient funds');
@@ -106,11 +106,11 @@ describe('Transaction Entity', () => {
 
     it('should update status from PENDING to ERROR', () => {
       const transaction = Transaction.create(mockProps);
-      const wompiData = {
+      const wpData = {
         errorMessage: 'Connection timeout',
       };
 
-      transaction.updateStatus(TransactionStatus.ERROR, wompiData);
+      transaction.updateStatus(TransactionStatus.ERROR, wpData);
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.ERROR);
       expect(transaction.errorMessage).toBe('Connection timeout');
@@ -134,7 +134,7 @@ describe('Transaction Entity', () => {
 
     it('should throw error when trying invalid transition', () => {
       const transaction = Transaction.create(mockProps);
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       expect(() => {
         transaction.updateStatus(TransactionStatus.PENDING);
@@ -149,7 +149,7 @@ describe('Transaction Entity', () => {
       jest.advanceTimersByTime(1000);
 
       transaction.updateStatus(TransactionStatus.APPROVED, {
-        transactionId: 'wompi-123',
+        transactionId: 'wp-123',
         reference: 'ref-123',
       });
 
@@ -158,63 +158,60 @@ describe('Transaction Entity', () => {
       jest.useRealTimers();
     });
 
-    it('should preserve existing wompi data when not provided', () => {
+    it('should preserve existing wp data when not provided', () => {
       const transaction = Transaction.create(mockProps);
 
-      // First update with wompi data
+      // First update with wp data
       transaction.updateStatus(TransactionStatus.ERROR, {
-        transactionId: 'wompi-123',
+        transactionId: 'wp-123',
         reference: 'ref-123',
       });
 
-      const originalWompiId = transaction.wompiTransactionId;
-      const originalReference = transaction.wompiReference;
+      const originalWpId = transaction.wpTransactionId;
+      const originalReference = transaction.wpReference;
 
       const json = transaction.toJSON();
 
-      // Verify data is preserved in serialization
-      expect(json.wompiTransactionId).toBe(originalWompiId);
-      expect(json.wompiReference).toBe(originalReference);
+      expect(json.wpTransactionId).toBe(originalWpId);
+      expect(json.wpReference).toBe(originalReference);
     });
 
-    it('should update with partial wompi data fields', () => {
+    it('should update with partial wp data fields', () => {
       const transaction = Transaction.create(mockProps);
 
-      // Update with complete wompi data
       transaction.updateStatus(TransactionStatus.APPROVED, {
-        transactionId: 'wompi-123',
+        transactionId: 'wp-123',
         reference: 'ref-123',
         paymentMethod: 'CARD',
       });
 
-      expect(transaction.wompiTransactionId).toBe('wompi-123');
-      expect(transaction.wompiReference).toBe('ref-123');
+      expect(transaction.wpTransactionId).toBe('wp-123');
+      expect(transaction.wpReference).toBe('ref-123');
       expect(transaction.paymentMethod).toBe('CARD');
       expect(transaction.errorMessage).toBeUndefined();
     });
   });
 
   describe('approve', () => {
-    it('should approve transaction with wompi data', () => {
+    it('should approve transaction with wp data', () => {
       const transaction = Transaction.create(mockProps);
 
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
-      expect(transaction.wompiTransactionId).toBe('wompi-123');
-      expect(transaction.wompiReference).toBe('ref-123');
+      expect(transaction.wpTransactionId).toBe('wp-123');
+      expect(transaction.wpReference).toBe('ref-123');
     });
 
     it('should not allow duplicate approval (idempotency check)', () => {
       const transaction = Transaction.create(mockProps);
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
-      // Trying to approve again with same status should not throw (idempotency)
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
-      expect(transaction.wompiTransactionId).toBe('wompi-123');
-      expect(transaction.wompiReference).toBe('ref-123');
+      expect(transaction.wpTransactionId).toBe('wp-123');
+      expect(transaction.wpReference).toBe('ref-123');
     });
   });
 
@@ -230,7 +227,7 @@ describe('Transaction Entity', () => {
 
     it('should throw error when trying to decline already approved transaction', () => {
       const transaction = Transaction.create(mockProps);
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       expect(() => {
         transaction.decline('Some reason');
@@ -250,7 +247,7 @@ describe('Transaction Entity', () => {
 
     it('should throw error when trying to mark error on approved transaction', () => {
       const transaction = Transaction.create(mockProps);
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       expect(() => {
         transaction.markAsError('Some error');
@@ -277,8 +274,8 @@ describe('Transaction Entity', () => {
         address: mockProps.address,
         city: mockProps.city,
         postalCode: mockProps.postalCode,
-        wompiTransactionId: undefined,
-        wompiReference: undefined,
+        wpTransactionId: undefined,
+        wpReference: undefined,
         paymentMethod: undefined,
         errorMessage: undefined,
         createdAt: transaction.createdAt,
@@ -286,14 +283,14 @@ describe('Transaction Entity', () => {
       });
     });
 
-    it('should include wompi data in JSON when present', () => {
+    it('should include wp data in JSON when present', () => {
       const transaction = Transaction.create(mockProps);
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
       const json = transaction.toJSON();
 
-      expect(json.wompiTransactionId).toBe('wompi-123');
-      expect(json.wompiReference).toBe('ref-123');
+      expect(json.wpTransactionId).toBe('wp-123');
+      expect(json.wpReference).toBe('ref-123');
       expect(json.status).toBe(TransactionStatus.APPROVED);
     });
 
@@ -314,12 +311,12 @@ describe('Transaction Entity', () => {
 
       expect(transaction.isPending()).toBe(true);
 
-      transaction.approve('wompi-final-123', 'ref-final-123');
+      transaction.approve('wp-final-123', 'ref-final-123');
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
       expect(transaction.isPending()).toBe(false);
-      expect(transaction.wompiTransactionId).toBe('wompi-final-123');
-      expect(transaction.wompiReference).toBe('ref-final-123');
+      expect(transaction.wpTransactionId).toBe('wp-final-123');
+      expect(transaction.wpReference).toBe('ref-final-123');
     });
 
     it('should handle failed payment flow', () => {
@@ -339,25 +336,23 @@ describe('Transaction Entity', () => {
 
       expect(transaction.isPending()).toBe(true);
 
-      transaction.markAsError('Wompi API timeout');
+      transaction.markAsError('WP API timeout');
 
       expect(transaction.getStatusValue()).toBe(TransactionStatus.ERROR);
       expect(transaction.isPending()).toBe(false);
-      expect(transaction.errorMessage).toBe('Wompi API timeout');
+      expect(transaction.errorMessage).toBe('WP API timeout');
     });
 
     it('should maintain data integrity through multiple operations', () => {
       const transaction = Transaction.create(mockProps);
 
-      // Original data should be immutable
       expect(transaction.id).toBe(mockProps.id);
       expect(transaction.productId).toBe(mockProps.productId);
       expect(transaction.quantity).toBe(mockProps.quantity);
       expect(transaction.amount).toBe(mockProps.amount);
 
-      transaction.approve('wompi-123', 'ref-123');
+      transaction.approve('wp-123', 'ref-123');
 
-      // Original data should still be the same
       expect(transaction.id).toBe(mockProps.id);
       expect(transaction.productId).toBe(mockProps.productId);
       expect(transaction.quantity).toBe(mockProps.quantity);

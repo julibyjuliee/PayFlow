@@ -77,7 +77,7 @@ export const useCheckoutForm = (initialData: CheckoutFormData): UseCheckoutFormR
         }
 
         if (touched.postalCode && !validatePostalCode(formData.postalCode)) {
-            errors.postalCode = 'Código postal inválido (5 dígitos)';
+            errors.postalCode = 'Código postal inválido (máximo 6 dígitos)';
         }
 
         if (touched.cardNumber) {
@@ -114,7 +114,7 @@ export const useCheckoutForm = (initialData: CheckoutFormData): UseCheckoutFormR
         } else if (name === 'cvv') {
             formattedValue = value.replace(/\D/g, '').slice(0, 4);
         } else if (name === 'postalCode') {
-            formattedValue = value.replace(/\D/g, '').slice(0, 5);
+            formattedValue = value.replace(/\D/g, '').slice(0, 6);
         }
 
         setFormData(prev => ({ ...prev, [name]: formattedValue }));

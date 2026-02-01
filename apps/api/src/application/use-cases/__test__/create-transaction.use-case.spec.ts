@@ -678,8 +678,8 @@ describe('CreateTransactionUseCase', () => {
             expect(result.isSuccess()).toBe(true);
             const transaction = result.getValue();
             expect(transaction.isPending()).toBe(true);
-            expect(transaction.wompiTransactionId).toBeUndefined();
-            expect(transaction.wompiReference).toBeUndefined();
+            expect(transaction.wpTransactionId).toBeUndefined();
+            expect(transaction.wpReference).toBeUndefined();
         });
 
         it('should create transaction with timestamps', async () => {

@@ -140,8 +140,8 @@ describe('GetOrderUseCase', () => {
                 'Medellín',
                 '050001',
                 'jane.smith@example.com',
-                'wompi-transaction-123',
-                'wompi-ref-123',
+                'wp-transaction-123',
+                'wp-ref-123',
                 'CARD',
             );
 
@@ -152,8 +152,8 @@ describe('GetOrderUseCase', () => {
             const order = result.getValue();
 
             expect(order.getStatusValue()).toBe(TransactionStatus.APPROVED);
-            expect(order.wompiTransactionId).toBe('wompi-transaction-123');
-            expect(order.wompiReference).toBe('wompi-ref-123');
+            expect(order.wpTransactionId).toBe('wp-transaction-123');
+            expect(order.wpReference).toBe('wp-ref-123');
             expect(order.paymentMethod).toBe('CARD');
         });
 

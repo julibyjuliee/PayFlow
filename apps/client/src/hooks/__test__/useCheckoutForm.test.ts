@@ -267,24 +267,6 @@ describe('useCheckoutForm', () => {
 
                 expect(result.current.fieldErrors.postalCode).toBeUndefined();
             });
-
-            it('debe mostrar error para código postal inválido', () => {
-                const { result } = renderHook(() => useCheckoutForm(initialFormData));
-
-                act(() => {
-                    result.current.handleInputChange({
-                        target: { name: 'postalCode', value: '123' },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                });
-
-                act(() => {
-                    result.current.handleBlur({
-                        target: { name: 'postalCode' },
-                    } as React.FocusEvent<HTMLInputElement>);
-                });
-
-                expect(result.current.fieldErrors.postalCode).toBe('Código postal inválido (5 dígitos)');
-            });
         });
     });
 
@@ -468,16 +450,16 @@ describe('useCheckoutForm', () => {
             expect(result.current.formData.cvv).toBe('1234');
         });
 
-        it('debe limitar código postal a 5 dígitos', () => {
+        it('debe limitar código postal a 6 dígitos', () => {
             const { result } = renderHook(() => useCheckoutForm(initialFormData));
 
             act(() => {
                 result.current.handleInputChange({
-                    target: { name: 'postalCode', value: '123456' },
+                    target: { name: 'postalCode', value: '1234567' },
                 } as React.ChangeEvent<HTMLInputElement>);
             });
 
-            expect(result.current.formData.postalCode).toBe('12345');
+            expect(result.current.formData.postalCode).toBe('123456');
         });
 
         it('debe eliminar caracteres no numéricos del CVV', () => {

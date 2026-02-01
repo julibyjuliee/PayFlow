@@ -9,7 +9,7 @@ import { Result } from '../../shared/result';
 
 /**
  * Process Order Payment Use Case
- * Processes payment through Wompi and updates order status
+ * Processes payment through WP and updates order status
  * Following Railway Oriented Programming pattern
  */
 @Injectable()
@@ -57,7 +57,7 @@ export class ProcessOrderPaymentUseCase {
     if (paymentResponse.status === 'APPROVED' || paymentResponse.status === 'PENDING') {
       return await this.handleApprovedPayment(order, paymentResponse);
     } else if (paymentResponse.status === 'DECLINED') {
-      order.decline('Payment was declined by Wompi');
+      order.decline('Payment was declined by WP');
       await this.orderRepository.update(order);
       return Result.ok(order);
     }

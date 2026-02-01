@@ -9,7 +9,7 @@ describe('PaymentService', () => {
         globalAny.fetch = vi.fn();
         Object.defineProperty(import.meta, 'env', {
             value: {
-                VITE_WP_API_URL: 'https://fake-wompi.com/tokenize',
+                VITE_WP_API_URL: 'https://fake-wp.com/tokenize',
                 VITE_WP_PUBLIC_KEY: 'fake-public-key',
                 VITE_API_URL: 'https://fake-api.com',
             },

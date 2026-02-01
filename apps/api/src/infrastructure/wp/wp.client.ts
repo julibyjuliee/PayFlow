@@ -10,19 +10,19 @@ import {
 import { Result } from '../../shared/result';
 
 /**
- * Wompi API Client (Adapter)
- * Implementa el puerto IPaymentGateway utilizando la API REST de Wompi
- * Integración directa con la API de Wompi
+ * WP API Client (Adapter)
+ * Implementa el puerto IPaymentGateway utilizando la API REST de WP
+ * Integración directa con la API de WP
  */
 @Injectable()
-export class WompiClient implements IPaymentGateway {
+export class WpClient implements IPaymentGateway {
   private readonly httpClient: AxiosInstance;
   private readonly publicKey: string;
   private readonly privateKey: string;
   private readonly integrityKey: string;
 
   constructor(private readonly configService: ConfigService) {
-    const baseURL = this.configService.get<string>('WP_BASE_URL') || 'https://api-sandbox.co.uat.wompi.dev/v1';
+    const baseURL = this.configService.get<string>('WP_BASE_URL') || 'https://api-sandbox.co.uat.wp.dev/v1';
     this.publicKey = this.configService.get<string>('WP_PUBLIC_KEY') || '';
     this.privateKey = this.configService.get<string>('WP_PRIVATE_KEY') || '';
     this.integrityKey = this.configService.get<string>('WP_INTEGRITY_KEY') || '';
@@ -47,7 +47,7 @@ export class WompiClient implements IPaymentGateway {
   }
 
   /**
-   * Genera la firma de integridad SHA256 requerida por Wompi
+   * Genera la firma de integridad SHA256 requerida por WP
    * Esta firma es obligatoria para todas las transacciones
    * @param reference Referencia única de la transacción
    * @param amountInCents Valor total en centavos
@@ -65,18 +65,18 @@ export class WompiClient implements IPaymentGateway {
     request: PaymentRequest,
   ): Promise<Result<PaymentResponse, Error>> {
     try {
-      // Obtener acceptance_token (requerido por Wompi)
+      // Obtener acceptance_token (requerido por WP)
       const acceptanceToken = await this.getAcceptanceToken();
 
       const amountInCents = Math.round(request.amount * 100);
 
-      // Generar firma de integridad (requerida por Wompi para seguridad)
+      // Generar firma de integridad (requerida por WP para seguridad)
       const integritySignature = this.generateIntegritySignature(
         request.reference,
         amountInCents,
       );
 
-      // Construir el payload según el formato de Wompi para API directa
+      // Construir el payload según el formato de WP para API directa
       const payload: any = {
         acceptance_token: acceptanceToken,
         amount_in_cents: amountInCents,

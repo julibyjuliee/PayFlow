@@ -15,8 +15,8 @@ export class OrderDto {
   city: string;
   postalCode: string;
   customerEmail: string;
-  wompiTransactionId?: string;
-  wompiReference?: string;
+  wpTransactionId?: string;
+  wpReference?: string;
   paymentMethod?: string;
   errorMessage?: string;
   createdAt: Date;

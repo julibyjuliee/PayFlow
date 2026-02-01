@@ -20,8 +20,8 @@ export class OrderMapper {
       entity.city,
       entity.postalCode,
       entity.customerEmail || '',
-      entity.wompiTransactionId,
-      entity.wompiReference,
+      entity.wpTransactionId,
+      entity.wpReference,
       entity.paymentMethod,
       entity.errorMessage,
       entity.createdAt,
@@ -41,8 +41,8 @@ export class OrderMapper {
     entity.city = domain.city;
     entity.postalCode = domain.postalCode;
     entity.customerEmail = domain.customerEmail;
-    entity.wompiTransactionId = domain.wompiTransactionId;
-    entity.wompiReference = domain.wompiReference;
+    entity.wpTransactionId = domain.wpTransactionId;
+    entity.wpReference = domain.wpReference;
     entity.paymentMethod = domain.paymentMethod;
     entity.errorMessage = domain.errorMessage;
     entity.createdAt = domain.createdAt;
