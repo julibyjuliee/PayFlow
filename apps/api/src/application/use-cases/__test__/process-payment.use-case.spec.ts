@@ -42,7 +42,7 @@ describe('ProcessPaymentUseCase', () => {
     };
 
     const mockApprovedPaymentResponse = {
-        id: 'wompi-trans-123',
+        id: 'wp-trans-123',
         reference: 'ref-123',
         status: 'APPROVED',
         amount: 200000,
@@ -111,7 +111,7 @@ describe('ProcessPaymentUseCase', () => {
 
         it('should fail when transaction is not in PENDING state', async () => {
             const approvedTransaction = createMockTransaction();
-            approvedTransaction.approve('wompi-old', 'ref-old');
+            approvedTransaction.approve('wp-old', 'ref-old');
 
             transactionRepository.findById.mockResolvedValue(Result.ok(approvedTransaction));
 
@@ -197,7 +197,7 @@ describe('ProcessPaymentUseCase', () => {
             const mockTransaction = createMockTransaction();
 
             const declinedResponse = {
-                id: 'wompi-trans-declined',
+                id: 'wp-trans-declined',
                 reference: 'ref-declined',
                 status: 'DECLINED',
                 amount: 200000,
@@ -216,7 +216,7 @@ describe('ProcessPaymentUseCase', () => {
 
             expect(result.isSuccess()).toBe(true);
             const transaction = result.getValue();
-            expect(transaction.errorMessage).toBe('Payment was declined by Wompi');
+            expect(transaction.errorMessage).toBe('Payment was declined by WP');
             expect(transactionRepository.update).toHaveBeenCalled();
             expect(productRepository.findById).not.toHaveBeenCalled();
         });
@@ -226,7 +226,7 @@ describe('ProcessPaymentUseCase', () => {
             const mockProduct = createMockProduct();
 
             const pendingResponse = {
-                id: 'wompi-trans-pending',
+                id: 'wp-trans-pending',
                 reference: 'ref-pending',
                 status: 'PENDING',
                 amount: 200000,
@@ -270,7 +270,7 @@ describe('ProcessPaymentUseCase', () => {
             const mockTransaction = createMockTransaction();
 
             const unknownResponse = {
-                id: 'wompi-trans-unknown',
+                id: 'wp-trans-unknown',
                 reference: 'ref-unknown',
                 status: 'VOIDED',
                 amount: 200000,
@@ -801,8 +801,8 @@ describe('ProcessPaymentUseCase', () => {
             expect(result.isSuccess()).toBe(true);
             const transaction = result.getValue();
             expect(transaction.getStatusValue()).toBe(TransactionStatus.APPROVED);
-            expect(transaction.wompiTransactionId).toBe('wompi-trans-123');
-            expect(transaction.wompiReference).toBe('ref-123');
+            expect(transaction.wpTransactionId).toBe('wp-trans-123');
+            expect(transaction.wpReference).toBe('ref-123');
         });
     });
 

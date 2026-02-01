@@ -22,7 +22,7 @@ import {
 
 /**
  * Transactions Controller
- * Maneja el ciclo de vida de las transacciones y pagos con Wompi
+ * Maneja el ciclo de vida de las transacciones y pagos con WP
  */
 @Controller('transactions')
 export class TransactionsController {
@@ -103,7 +103,7 @@ export class TransactionsController {
   }
 
   @Post('webhook')
-  async handleWompiWebhook(@Body() payload: any): Promise<{ status: string }> {
+  async handleWpWebhook(@Body() payload: any): Promise<{ status: string }> {
 
     try {
       if (!payload.event || !payload.data?.transaction) {
@@ -112,7 +112,7 @@ export class TransactionsController {
 
       const transaction = payload.data.transaction;
       const reference = transaction.reference;
-      const wompiStatus = transaction.status;
+      const wpStatus = transaction.status;
 
       const orderResult = await this.getTransactionUseCase.execute(reference);
 
@@ -122,7 +122,7 @@ export class TransactionsController {
 
       const order = orderResult.getValue();
 
-      if (wompiStatus === 'APPROVED' && order.isPending()) {
+      if (wpStatus === 'APPROVED' && order.isPending()) {
 
         const processResult = await this.processPaymentUseCase.execute({
           transactionId: reference,

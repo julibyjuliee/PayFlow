@@ -42,15 +42,15 @@ export class OrderEntity {
   @Column({ type: 'text', default: 'pending' })
   status: string;
 
-  // Campos adicionales para Wompi (agregados en Supabase)
+  // Campos adicionales para WP (agregados en Supabase)
   @Column({ type: 'text', nullable: true, name: 'customer_email' })
   customerEmail?: string;
 
-  @Column({ type: 'text', nullable: true, name: 'wompi_transaction_id' })
-  wompiTransactionId?: string;
+  @Column({ type: 'text', nullable: true, name: 'wp_transaction_id' })
+  wpTransactionId?: string;
 
-  @Column({ type: 'text', nullable: true, name: 'wompi_reference' })
-  wompiReference?: string;
+  @Column({ type: 'text', nullable: true, name: 'wp_reference' })
+  wpReference?: string;
 
   @Column({ type: 'text', nullable: true, name: 'payment_method' })
   paymentMethod?: string;

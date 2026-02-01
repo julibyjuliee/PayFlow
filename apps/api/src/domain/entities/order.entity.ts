@@ -23,8 +23,8 @@ export class Order {
     public readonly city: string,
     public readonly postalCode: string,
     public readonly customerEmail: string,
-    public wompiTransactionId?: string,
-    public wompiReference?: string,
+    public wpTransactionId?: string,
+    public wpReference?: string,
     public paymentMethod?: string,
     public errorMessage?: string,
     public readonly createdAt: Date = new Date(),
@@ -40,7 +40,7 @@ export class Order {
 
   public updateStatus(
     newStatus: TransactionStatus,
-    wompiData?: {
+    wpData?: {
       transactionId?: string;
       reference?: string;
       paymentMethod?: string;
@@ -56,26 +56,26 @@ export class Order {
 
     this.status = new TransactionStatusVO(newStatus);
 
-    if (wompiData) {
-      if (wompiData.transactionId) {
-        this.wompiTransactionId = wompiData.transactionId;
+    if (wpData) {
+      if (wpData.transactionId) {
+        this.wpTransactionId = wpData.transactionId;
       }
-      if (wompiData.reference) {
-        this.wompiReference = wompiData.reference;
+      if (wpData.reference) {
+        this.wpReference = wpData.reference;
       }
-      if (wompiData.paymentMethod) {
-        this.paymentMethod = wompiData.paymentMethod;
+      if (wpData.paymentMethod) {
+        this.paymentMethod = wpData.paymentMethod;
       }
-      if (wompiData.errorMessage) {
-        this.errorMessage = wompiData.errorMessage;
+      if (wpData.errorMessage) {
+        this.errorMessage = wpData.errorMessage;
       }
     }
   }
 
-  public approve(wompiTransactionId: string, wompiReference: string): void {
+  public approve(wpTransactionId: string, wpReference: string): void {
     this.updateStatus(TransactionStatus.APPROVED, {
-      transactionId: wompiTransactionId,
-      reference: wompiReference,
+      transactionId: wpTransactionId,
+      reference: wpReference,
     });
   }
 
@@ -145,8 +145,8 @@ export class Order {
       city: this.city,
       postalCode: this.postalCode,
       customerEmail: this.customerEmail,
-      wompiTransactionId: this.wompiTransactionId,
-      wompiReference: this.wompiReference,
+      wpTransactionId: this.wpTransactionId,
+      wpReference: this.wpReference,
       paymentMethod: this.paymentMethod,
       errorMessage: this.errorMessage,
       createdAt: this.createdAt,

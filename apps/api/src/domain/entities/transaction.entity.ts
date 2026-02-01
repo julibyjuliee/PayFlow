@@ -31,8 +31,8 @@ export class Transaction {
     public readonly address: string,
     public readonly city: string,
     public readonly postalCode: string,
-    public wompiTransactionId?: string,
-    public wompiReference?: string,
+    public wpTransactionId?: string,
+    public wpReference?: string,
     public paymentMethod?: string,
     public errorMessage?: string,
     public readonly createdAt: Date = new Date(),
@@ -67,7 +67,7 @@ export class Transaction {
 
 public updateStatus(
     newStatus: TransactionStatus,
-    wompiData?: {
+    wpData?: {
       transactionId?: string;
       reference?: string;
       paymentMethod?: string;
@@ -86,17 +86,17 @@ public updateStatus(
 
     this.status = new TransactionStatusVO(newStatus);
     this.updatedAt = new Date();
-    
-    if (wompiData) {
-      this.wompiTransactionId = wompiData.transactionId || this.wompiTransactionId;
-      this.wompiReference = wompiData.reference || this.wompiReference;
-      this.paymentMethod = wompiData.paymentMethod || this.paymentMethod;
-      this.errorMessage = wompiData.errorMessage || this.errorMessage;
+
+    if (wpData) {
+      this.wpTransactionId = wpData.transactionId || this.wpTransactionId;
+      this.wpReference = wpData.reference || this.wpReference;
+      this.paymentMethod = wpData.paymentMethod || this.paymentMethod;
+      this.errorMessage = wpData.errorMessage || this.errorMessage;
     }
   }
 
-  public approve(wompiId: string, reference: string): void {
-    this.updateStatus(TransactionStatus.APPROVED, { transactionId: wompiId, reference });
+  public approve(wpId: string, reference: string): void {
+    this.updateStatus(TransactionStatus.APPROVED, { transactionId: wpId, reference });
   }
 
   public decline(reason: string): void {
@@ -121,8 +121,8 @@ public updateStatus(
       address: this.address,
       city: this.city,
       postalCode: this.postalCode,
-      wompiTransactionId: this.wompiTransactionId,
-      wompiReference: this.wompiReference,
+      wpTransactionId: this.wpTransactionId,
+      wpReference: this.wpReference,
       paymentMethod: this.paymentMethod,
       errorMessage: this.errorMessage,
       createdAt: this.createdAt,

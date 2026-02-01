@@ -29,6 +29,7 @@ interface UsePaymentProcessingReturn {
 export const usePaymentProcessing = (
     items: CartItem[],
     customerData: CustomerData,
+    totalAmount: number,
     onSuccess: () => void
 ): UsePaymentProcessingReturn => {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -92,7 +93,29 @@ export const usePaymentProcessing = (
                 handleSuccessfulPayment();
             }
 
-            navigate(`/payment-result?transactionId=${transaction.id}&status=${status}`);
+            navigate('/payment-result', {
+                state: {
+                    status,
+                    orderNumber: transaction.id,
+                    customerInfo: {
+                        firstName: customerData.firstName,
+                        lastName: customerData.lastName,
+                    },
+                    product: {
+                        name: items[0].product.name,
+                        price: items[0].product.price,
+                        quantity: items[0].quantity,
+                        imageUrl: items[0].product.imageUrl,
+                    },
+                    deliveryAddress: {
+                        street: customerData.address,
+                        city: customerData.city,
+                        postalCode: customerData.postalCode,
+                    },
+                    totalAmount: totalAmount,
+                    errorMessage: transaction.errorMessage || undefined,
+                }
+            });
         } catch (err) {
             console.error('Error en el proceso de pago:', err);
             const errorMsg = err instanceof Error ? err.message : 'Error desconocido en el pago';
@@ -100,7 +123,7 @@ export const usePaymentProcessing = (
         } finally {
             setIsProcessing(false);
         }
-    }, [items, customerData, navigate, handleSuccessfulPayment]);
+    }, [items, customerData, totalAmount, navigate, handleSuccessfulPayment]);
 
     return {
         isProcessing,

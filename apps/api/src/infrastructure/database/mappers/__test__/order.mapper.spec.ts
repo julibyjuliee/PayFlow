@@ -52,16 +52,16 @@ describe('OrderMapper', () => {
       orderEntity.city = 'Bogotá';
       orderEntity.postalCode = '110111';
       orderEntity.customerEmail = 'john@example.com';
-      orderEntity.wompiTransactionId = 'wompi-tx-123';
-      orderEntity.wompiReference = 'wompi-ref-456';
+      orderEntity.wpTransactionId = 'wp-tx-123';
+      orderEntity.wpReference = 'wp-ref-456';
       orderEntity.paymentMethod = 'CARD';
       orderEntity.errorMessage = 'Test error';
       orderEntity.createdAt = new Date('2024-01-01');
 
       const domainOrder = OrderMapper.toDomain(orderEntity);
 
-      expect(domainOrder.wompiTransactionId).toBe('wompi-tx-123');
-      expect(domainOrder.wompiReference).toBe('wompi-ref-456');
+      expect(domainOrder.wpTransactionId).toBe('wp-tx-123');
+      expect(domainOrder.wpReference).toBe('wp-ref-456');
       expect(domainOrder.paymentMethod).toBe('CARD');
       expect(domainOrder.errorMessage).toBe('Test error');
     });
@@ -163,16 +163,16 @@ describe('OrderMapper', () => {
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
       orderEntity.customerEmail = 'test@example.com';
-      orderEntity.wompiTransactionId = undefined;
-      orderEntity.wompiReference = undefined;
+      orderEntity.wpTransactionId = undefined;
+      orderEntity.wpReference = undefined;
       orderEntity.paymentMethod = undefined;
       orderEntity.errorMessage = undefined;
       orderEntity.createdAt = new Date();
 
       const domainOrder = OrderMapper.toDomain(orderEntity);
 
-      expect(domainOrder.wompiTransactionId).toBeUndefined();
-      expect(domainOrder.wompiReference).toBeUndefined();
+      expect(domainOrder.wpTransactionId).toBeUndefined();
+      expect(domainOrder.wpReference).toBeUndefined();
       expect(domainOrder.paymentMethod).toBeUndefined();
       expect(domainOrder.errorMessage).toBeUndefined();
     });
@@ -267,8 +267,8 @@ describe('OrderMapper', () => {
         'Bogotá',
         '110111',
         'john@example.com',
-        'wompi-tx-123',
-        'wompi-ref-456',
+        'wp-tx-123',
+        'wp-ref-456',
         'CARD',
         'Test error',
         new Date('2024-01-01'),
@@ -276,8 +276,8 @@ describe('OrderMapper', () => {
 
       const orderEntity = OrderMapper.toEntity(domainOrder);
 
-      expect(orderEntity.wompiTransactionId).toBe('wompi-tx-123');
-      expect(orderEntity.wompiReference).toBe('wompi-ref-456');
+      expect(orderEntity.wpTransactionId).toBe('wp-tx-123');
+      expect(orderEntity.wpReference).toBe('wp-ref-456');
       expect(orderEntity.paymentMethod).toBe('CARD');
       expect(orderEntity.errorMessage).toBe('Test error');
       expect(orderEntity.createdAt).toEqual(new Date('2024-01-01'));
@@ -336,8 +336,8 @@ describe('OrderMapper', () => {
 
       const orderEntity = OrderMapper.toEntity(domainOrder);
 
-      expect(orderEntity.wompiTransactionId).toBeUndefined();
-      expect(orderEntity.wompiReference).toBeUndefined();
+      expect(orderEntity.wpTransactionId).toBeUndefined();
+      expect(orderEntity.wpReference).toBeUndefined();
       expect(orderEntity.paymentMethod).toBeUndefined();
       expect(orderEntity.errorMessage).toBeUndefined();
     });
@@ -428,8 +428,8 @@ describe('OrderMapper', () => {
         'Cali',
         '760001',
         'ana@example.com',
-        'wompi-tx-789',
-        'wompi-ref-abc',
+        'wp-tx-789',
+        'wp-ref-abc',
         'NEQUI',
         undefined,
         new Date('2024-01-15T08:00:00Z'),
@@ -450,8 +450,8 @@ describe('OrderMapper', () => {
       expect(convertedOrder.city).toBe(originalOrder.city);
       expect(convertedOrder.postalCode).toBe(originalOrder.postalCode);
       expect(convertedOrder.customerEmail).toBe(originalOrder.customerEmail);
-      expect(convertedOrder.wompiTransactionId).toBe(originalOrder.wompiTransactionId);
-      expect(convertedOrder.wompiReference).toBe(originalOrder.wompiReference);
+      expect(convertedOrder.wpTransactionId).toBe(originalOrder.wpTransactionId);
+      expect(convertedOrder.wpReference).toBe(originalOrder.wpReference);
       expect(convertedOrder.paymentMethod).toBe(originalOrder.paymentMethod);
       expect(convertedOrder.createdAt).toEqual(originalOrder.createdAt);
     });
@@ -469,8 +469,8 @@ describe('OrderMapper', () => {
       originalEntity.city = 'Barranquilla';
       originalEntity.postalCode = '080001';
       originalEntity.customerEmail = 'pedro@example.com';
-      originalEntity.wompiTransactionId = 'wompi-456';
-      originalEntity.wompiReference = 'ref-789';
+      originalEntity.wpTransactionId = 'wp-456';
+      originalEntity.wpReference = 'ref-789';
       originalEntity.paymentMethod = 'PSE';
       originalEntity.errorMessage = 'Payment declined';
       originalEntity.createdAt = new Date('2024-02-20T14:30:00Z');
@@ -489,8 +489,8 @@ describe('OrderMapper', () => {
       expect(convertedEntity.city).toBe(originalEntity.city);
       expect(convertedEntity.postalCode).toBe(originalEntity.postalCode);
       expect(convertedEntity.customerEmail).toBe(originalEntity.customerEmail);
-      expect(convertedEntity.wompiTransactionId).toBe(originalEntity.wompiTransactionId);
-      expect(convertedEntity.wompiReference).toBe(originalEntity.wompiReference);
+      expect(convertedEntity.wpTransactionId).toBe(originalEntity.wpTransactionId);
+      expect(convertedEntity.wpReference).toBe(originalEntity.wpReference);
       expect(convertedEntity.paymentMethod).toBe(originalEntity.paymentMethod);
       expect(convertedEntity.errorMessage).toBe(originalEntity.errorMessage);
       expect(convertedEntity.createdAt).toEqual(originalEntity.createdAt);
@@ -603,16 +603,16 @@ describe('OrderMapper', () => {
       orderEntity.city = 'City';
       orderEntity.postalCode = '12345';
       orderEntity.customerEmail = 'test@example.com';
-      orderEntity.wompiTransactionId = '';
-      orderEntity.wompiReference = '';
+      orderEntity.wpTransactionId = '';
+      orderEntity.wpReference = '';
       orderEntity.paymentMethod = '';
       orderEntity.errorMessage = '';
       orderEntity.createdAt = new Date();
 
       const domainOrder = OrderMapper.toDomain(orderEntity);
 
-      expect(domainOrder.wompiTransactionId).toBe('');
-      expect(domainOrder.wompiReference).toBe('');
+      expect(domainOrder.wpTransactionId).toBe('');
+      expect(domainOrder.wpReference).toBe('');
       expect(domainOrder.paymentMethod).toBe('');
       expect(domainOrder.errorMessage).toBe('');
     });

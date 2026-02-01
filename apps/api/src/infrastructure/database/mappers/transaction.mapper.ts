@@ -16,8 +16,8 @@ export class TransactionMapper {
       entity.address,
       entity.city,
       entity.postalCode,
-      entity.wompiTransactionId ?? undefined,
-      entity.wompiReference ?? undefined,
+      entity.wpTransactionId ?? undefined,
+      entity.wpReference ?? undefined,
       entity.paymentMethod ?? undefined,
       entity.errorMessage ?? undefined,
       entity.createdAt
@@ -37,8 +37,8 @@ export class TransactionMapper {
     entity.totalPrice = domain.amount.amount;
     entity.status = domain.getStatusValue();
     entity.customerEmail = domain.customerEmail;
-    entity.wompiTransactionId = domain.wompiTransactionId;
-    entity.wompiReference = domain.wompiReference;
+    entity.wpTransactionId = domain.wpTransactionId;
+    entity.wpReference = domain.wpReference;
     entity.paymentMethod = domain.paymentMethod;
     entity.errorMessage = domain.errorMessage;
     entity.createdAt = domain.createdAt;

@@ -185,10 +185,10 @@ export const validateCity = (city: string): boolean => {
 };
 
 /**
- * Valida código postal (5 dígitos)
+ * Valida código postal (máximo 6 dígitos)
  */
 export const validatePostalCode = (postalCode: string): boolean => {
-    return /^\d{5}$/.test(postalCode.trim());
+    return /^\d{1,6}$/.test(postalCode.trim());
 };
 
 /**

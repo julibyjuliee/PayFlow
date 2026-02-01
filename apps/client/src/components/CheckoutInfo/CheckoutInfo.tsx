@@ -20,12 +20,6 @@ interface CheckoutInfoProps {
     onNavigateBack?: () => void;
 }
 
-/**
- * Main checkout component following SOLID principles:
- * - Single Responsibility: Only orchestrates child components and business logic
- * - Open/Closed: Open for extension through props, closed for modification
- * - Dependency Inversion: Depends on abstractions (custom hooks) not concretions
- */
 export const CheckoutInfo = ({
     product,
     quantity = 1,
@@ -44,7 +38,6 @@ export const CheckoutInfo = ({
 
     const dispatch = useAppDispatch();
 
-    // Use custom hooks following SOLID principles
     const {
         formData,
         fieldErrors,
@@ -71,7 +64,6 @@ export const CheckoutInfo = ({
     const { subtotal, tax, shipping, total } = useOrderCalculations(items);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Event handlers following Single Responsibility Principle
     const handleRemoveItem = (productId: string) => {
         dispatch(removeFromCart(productId));
     };
@@ -157,7 +149,7 @@ export const CheckoutInfo = ({
                                 isOpen={isModalOpen}
                                 onClose={handleModalClose}
                                 items={items}
-                                subtotal={subtotal}
+                                total={total}
                                 customerData={formData}
                                 onSuccess={handlePaymentSuccess}
                             />

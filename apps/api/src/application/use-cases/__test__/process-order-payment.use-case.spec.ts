@@ -45,7 +45,7 @@ describe('ProcessOrderPaymentUseCase', () => {
     };
 
     const mockApprovedPaymentResponse = {
-        id: 'wompi-trans-123',
+        id: 'wp-trans-123',
         reference: 'ref-123',
         status: 'APPROVED',
         amount: 200000,
@@ -127,7 +127,7 @@ describe('ProcessOrderPaymentUseCase', () => {
                 },
                 'john@example.com',
             );
-            approvedOrder.approve('wompi-old', 'ref-old');
+            approvedOrder.approve('wp-old', 'ref-old');
 
             orderRepository.findById.mockResolvedValue(Result.ok(approvedOrder));
 
@@ -213,7 +213,7 @@ describe('ProcessOrderPaymentUseCase', () => {
             const mockOrder = createMockOrder();
 
             const declinedResponse = {
-                id: 'wompi-trans-declined',
+                id: 'wp-trans-declined',
                 reference: 'ref-declined',
                 status: 'DECLINED',
                 amount: 200000,
@@ -232,7 +232,7 @@ describe('ProcessOrderPaymentUseCase', () => {
 
             expect(result.isSuccess()).toBe(true);
             const order = result.getValue();
-            expect(order.errorMessage).toBe('Payment was declined by Wompi');
+            expect(order.errorMessage).toBe('Payment was declined by WP');
             expect(orderRepository.update).toHaveBeenCalled();
             expect(productRepository.findById).not.toHaveBeenCalled();
         });
@@ -242,7 +242,7 @@ describe('ProcessOrderPaymentUseCase', () => {
             const mockProduct = createMockProduct();
 
             const pendingResponse = {
-                id: 'wompi-trans-pending',
+                id: 'wp-trans-pending',
                 reference: 'ref-pending',
                 status: 'PENDING',
                 amount: 200000,

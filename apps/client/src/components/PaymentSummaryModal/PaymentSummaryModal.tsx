@@ -10,7 +10,7 @@ interface PaymentSummaryModalProps {
     onClose: () => void;
     onSuccess: () => void;
     items: CartItem[];
-    subtotal: number;
+    total: number;
     customerData: CustomerData;
 }
 
@@ -19,16 +19,16 @@ export const PaymentSummaryModal = ({
     onClose,
     onSuccess,
     items,
-    subtotal,
+    total,
     customerData,
 }: PaymentSummaryModalProps) => {
     const { isProcessing, error, processPayment, resetError } = usePaymentProcessing(
         items,
         customerData,
+        total,
         onSuccess
     );
 
-    // Reset error when modal opens
     useEffect(() => {
         if (isOpen) {
             resetError();
@@ -42,7 +42,7 @@ export const PaymentSummaryModal = ({
             <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-2xl">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">Confirmación Final</h2>
 
-                <PaymentSummary subtotal={subtotal} total={subtotal} />
+                <PaymentSummary total={total} />
 
                 {error && <ErrorAlert message={error} />}
 

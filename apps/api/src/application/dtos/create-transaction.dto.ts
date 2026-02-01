@@ -26,8 +26,7 @@ export class CreateTransactionDto {
   @IsString()
   postalCode: string;
 
-  // Token de pago de Wompi (opcional)
-  // Si se proporciona, el pago se procesará automáticamente
+
   @IsOptional()
   @IsString()
   paymentToken?: string;

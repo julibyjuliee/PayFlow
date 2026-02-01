@@ -11,8 +11,8 @@ export class TransactionDto {
   currency: string;
   status: TransactionStatus;
   customerEmail: string;
-  wompiTransactionId?: string;
-  wompiReference?: string;
+  wpTransactionId?: string;
+  wpReference?: string;
   paymentMethod?: string;
   errorMessage?: string;
   createdAt: Date;

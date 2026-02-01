@@ -34,12 +34,14 @@ export interface CheckoutState {
     currentTransaction: Transaction | null;
     transactions: Transaction[];
     shippingAddress: ShippingAddress | null;
+    paymentTotal: number | null;
 }
 
 const initialState: CheckoutState = {
     currentTransaction: null,
     transactions: [],
     shippingAddress: null,
+    paymentTotal: null,
 };
 
 const checkoutSlice = createSlice({
@@ -48,6 +50,10 @@ const checkoutSlice = createSlice({
     reducers: {
         setShippingAddress: (state, action: PayloadAction<ShippingAddress>) => {
             state.shippingAddress = action.payload;
+        },
+
+        setPaymentTotal: (state, action: PayloadAction<number>) => {
+            state.paymentTotal = action.payload;
         },
 
         createTransaction: (
@@ -117,6 +123,7 @@ const checkoutSlice = createSlice({
 
 export const {
     setShippingAddress,
+    setPaymentTotal,
     createTransaction,
     completeTransaction,
     failTransaction,

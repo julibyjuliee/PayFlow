@@ -49,7 +49,7 @@ export class InvalidTransactionStateException extends DomainException {
 }
 
 export class PaymentProcessingException extends DomainException {
-  constructor(message: string, public readonly wompiError?: any) {
+  constructor(message: string, public readonly wpError?: any) {
     super(message, 'PAYMENT_PROCESSING_ERROR');
     this.name = 'PaymentProcessingException';
   }

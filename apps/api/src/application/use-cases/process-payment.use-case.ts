@@ -10,7 +10,7 @@ import { TransactionStatus } from '../../domain/value-objects';
 
 /**
  * Process Payment Use Case
- * Processes payment through Wompi and updates transaction status
+ * Processes payment through WP and updates transaction status
  * Following Railway Oriented Programming pattern
  */
 @Injectable()
@@ -68,7 +68,7 @@ export class ProcessPaymentUseCase {
     if (paymentResponse.status === 'APPROVED' || paymentResponse.status === 'PENDING') {
       return await this.handleApprovedPayment(transaction, paymentResponse);
     } else if (paymentResponse.status === 'DECLINED') {
-      transaction.decline('Payment was declined by Wompi');
+      transaction.decline('Payment was declined by WP');
       await this.transactionRepository.update(transaction);
       return Result.ok(transaction);
     } else {

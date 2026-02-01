@@ -8,7 +8,7 @@ import {
   TransactionRepository,
   OrderRepository,
 } from './infrastructure/database/repositories';
-import { WompiClient } from './infrastructure/wompi';
+import { WpClient } from './infrastructure/wp';
 import {
   GetProductsUseCase,
   GetProductByIdUseCase,
@@ -42,7 +42,7 @@ const orderRepositoryProvider = {
 
 const paymentGatewayProvider = {
   provide: 'IPaymentGateway',
-  useClass: WompiClient,
+  useClass: WpClient,
 };
 
 @Module({
@@ -61,7 +61,7 @@ const paymentGatewayProvider = {
     ProductRepository,
     TransactionRepository,
     OrderRepository,
-    WompiClient,
+    WpClient,
 
     // Use Cases
     GetProductsUseCase,

@@ -47,6 +47,8 @@ describe('checkoutSlice', () => {
             currentTransaction: null,
             transactions: [],
             shippingAddress: null,
+            paymentTotal: null,
+
         };
         vi.clearAllMocks();
     });
@@ -58,6 +60,7 @@ describe('checkoutSlice', () => {
                 currentTransaction: null,
                 transactions: [],
                 shippingAddress: null,
+                paymentTotal: null,
             });
         });
     });
@@ -576,6 +579,8 @@ describe('checkoutSlice', () => {
                 currentTransaction: null,
                 transactions: [existingTransaction],
                 shippingAddress: mockShippingAddress,
+                paymentTotal: null,
+
             };
 
             const state = checkoutReducer(stateWithTransactions, clearCurrentTransaction());
@@ -636,6 +641,8 @@ describe('checkoutSlice', () => {
                     },
                 ],
                 shippingAddress: mockShippingAddress,
+                paymentTotal: null,
+
             };
 
             const state = checkoutReducer(initialState, loadTransactionsFromStorage(loadedState));
@@ -648,6 +655,8 @@ describe('checkoutSlice', () => {
                 currentTransaction: null,
                 transactions: [],
                 shippingAddress: null,
+                paymentTotal: null,
+
             };
 
             const state = checkoutReducer(initialState, loadTransactionsFromStorage(emptyLoadedState));
@@ -689,6 +698,8 @@ describe('checkoutSlice', () => {
                 currentTransaction: null,
                 transactions: multipleTransactions,
                 shippingAddress: mockShippingAddress,
+                paymentTotal: null,
+
             };
 
             const state = checkoutReducer(initialState, loadTransactionsFromStorage(loadedState));
@@ -734,13 +745,18 @@ describe('checkoutSlice', () => {
                     address: 'Old Address',
                     city: 'Old City',
                     postalCode: '00000',
+
                 },
+                paymentTotal: null,
+
             };
 
             const newState: CheckoutState = {
                 currentTransaction: null,
                 transactions: [],
                 shippingAddress: null,
+                paymentTotal: null,
+
             };
 
             const state = checkoutReducer(existingState, loadTransactionsFromStorage(newState));

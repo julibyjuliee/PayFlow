@@ -45,7 +45,6 @@ export const PaymentForm = ({
                             </span>
                         )
                     }
-                    hint="Prueba: Visa 4532015112830366 | Mastercard 5425233430109903"
                 />
                 <div className="grid grid-cols-2 gap-6">
                     <FormInput

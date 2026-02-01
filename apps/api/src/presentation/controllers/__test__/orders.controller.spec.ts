@@ -284,7 +284,7 @@ describe('OrdersController', () => {
       const expectedDto: OrderDto = {
         ...mockOrderDto,
         status: TransactionStatus.APPROVED,
-        wompiTransactionId: 'wompi-tx-123',
+        wpTransactionId: 'wp-tx-123',
       };
 
       const mockOrder = {
@@ -297,7 +297,7 @@ describe('OrdersController', () => {
 
       expect(result).toEqual(expectedDto);
       expect(result.status).toBe(TransactionStatus.APPROVED);
-      expect(result.wompiTransactionId).toBe('wompi-tx-123');
+      expect(result.wpTransactionId).toBe('wp-tx-123');
     });
 
     it('should handle different order IDs', async () => {
@@ -332,8 +332,8 @@ describe('OrdersController', () => {
       const approvedOrderDto = {
         ...mockOrderDto,
         status: TransactionStatus.APPROVED,
-        wompiTransactionId: 'wompi-tx-123',
-        wompiReference: 'wompi-ref-456',
+        wpTransactionId: 'wp-tx-123',
+        wpReference: 'wp-ref-456',
         paymentMethod: 'CARD',
       };
 
@@ -400,7 +400,7 @@ describe('OrdersController', () => {
     });
 
     it('should throw HttpException with BAD_REQUEST status code', async () => {
-      const error = new Error('Wompi API error');
+      const error = new Error('WP API error');
       processOrderPaymentUseCase.execute.mockResolvedValue(Result.fail(error));
 
       try {
@@ -445,8 +445,8 @@ describe('OrdersController', () => {
       const approvedDto: OrderDto = {
         ...mockOrderDto,
         status: TransactionStatus.APPROVED,
-        wompiTransactionId: 'wompi-tx-789',
-        wompiReference: 'wompi-ref-789',
+        wpTransactionId: 'wp-tx-789',
+        wpReference: 'wp-ref-789',
         paymentMethod: 'CARD',
       };
 
@@ -461,8 +461,8 @@ describe('OrdersController', () => {
       const result = await controller.processPayment(processPaymentDto);
 
       expect(result.status).toBe(TransactionStatus.APPROVED);
-      expect(result.wompiTransactionId).toBe('wompi-tx-789');
-      expect(result.wompiReference).toBe('wompi-ref-789');
+      expect(result.wpTransactionId).toBe('wp-tx-789');
+      expect(result.wpReference).toBe('wp-ref-789');
       expect(result.paymentMethod).toBe('CARD');
     });
 
